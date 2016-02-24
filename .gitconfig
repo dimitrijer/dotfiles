@@ -1,0 +1,38 @@
+[user]
+	name = Dimitrije Radojević
+	email = dimitrijer@nordeus.eu
+[alias]
+	cv = commit -v
+	g = gui
+	cp = cherry-pick
+	st = status -sb
+	co = checkout
+	df = diff
+	dfc = diff --cached
+	br = branch
+	meld = !/home/dimitrijer/Projekti/git-meld/git-meld.pl
+	ls = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
+	ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
+	lnc = log --pretty=format:"%h\\ %s\\ [%cn]"
+	lds = log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=relative
+	filelog = log -u
+	dr  = "!f() { git diff "$1"^.."$1"; }; f"
+	lc  = "!f() { git ll "$1"^.."$1"; }; f"
+	diffr  = "!f() { git diff "$1"^.."$1"; }; f"
+	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %Cblue%an%Creset' --abbrev-commit
+	grep = grep -Ii
+	la = "!git config -l | grep alias | cut -c 7-"
+	f = fetch
+[color]
+	ui = true
+[merge]
+	tool = kdiff3
+[core]
+	editor = vim
+	mergeoptions = --no-edit
+[difftool "sourcetree"]
+	cmd = /usr/local/Cellar/kdiff3/0.9.98/kdiff3.app/Contents/MacOS/kdiff3 \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /usr/local/Cellar/kdiff3/0.9.98/kdiff3.app/Contents/MacOS/kdiff3 \"$BASE\" \"$LOCAL\" \"$REMOTE\" -o \"$MERGED\"
+	trustExitCode = true
