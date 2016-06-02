@@ -50,7 +50,7 @@ ZSH_THEME="crunch"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git brew terminalapp history history-substring-search)
+plugins=(brew terminalapp history history-substring-search)
 
 # User configuration
 
@@ -93,6 +93,7 @@ export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
 alias ll="ls -alh --color=auto"
 alias ls="ls --color=auto"
 alias weather="curl http://wttr.in/"
+alias gg="git gui"
 
 source /Users/dimitrijer/Library/Python/2.7/lib/python/site-packages/powerline/bindings/zsh/powerline.zsh
 export HOMEBREW_GITHUB_API_TOKEN="62f4c7849a940fce20452adde6055189198100fd"
