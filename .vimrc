@@ -130,8 +130,8 @@ let g:ctrlp_custom_ignore = {
   \ 'dir':  '\v[\/](target|\.(git|hg|svn))$' }
 
 " Always enable rainbow parenthesis.
-au VimEnter *.clj RainbowParenthesesToggle
-au Syntax *.clj RainbowParenthesesLoadRound
+au VimEnter * RainbowParenthesesToggle
+au Syntax * RainbowParenthesesLoadRound
 
 "python with virtualenv support
 py << EOF
