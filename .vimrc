@@ -13,16 +13,29 @@ Plugin 'gmarik/Vundle.vim'
 
 " Add all your plugins here (note older versions of Vundle used Bundle
 " instead of Plugin)
-Plugin 'Valloric/YouCompleteMe'
+" Plugin 'Valloric/YouCompleteMe'
+Bundle 'chase/vim-ansible-yaml'
 Plugin 'scrooloose/syntastic'
-Plugin 'kien/ctrlp.vim'
-Plugin 'vim-scripts/indentpython.vim'
-Plugin 'tmhedberg/SimpylFold'
+Plugin 'ctrlpvim/ctrlp.vim'
+" Plugin 'vim-scripts/indentpython.vim'
+" Plugin 'tmhedberg/SimpylFold'
 Plugin 'nvie/vim-flake8'
 Plugin 'bling/vim-airline'
 Plugin 'flazz/vim-colorschemes'
 Plugin 'tomasr/molokai'
-
+Plugin 'godlygeek/tabular'
+" Clojure dev plugins
+Plugin 'tpope/vim-salve'
+Plugin 'tpope/vim-projectionist'
+Plugin 'tpope/vim-dispatch'
+Plugin 'tpope/vim-fireplace'
+Plugin 'tpope/vim-surround'
+Plugin 'tpope/vim-repeat'
+Plugin 'guns/vim-sexp'
+Plugin 'tpope/vim-sexp-mappings-for-regular-people'
+Plugin 'kien/rainbow_parentheses.vim'
+Plugin 'guns/vim-clojure-highlight'
+Plugin 'bkad/CamelCaseMotion'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -98,11 +111,28 @@ set splitright
 set foldmethod=indent
 set foldlevel=99
 
+" 80-line column.
+if exists('+colorcolumn')
+	set colorcolumn=120
+endif
+
 " Enable folding with the spacebar
 nnoremap <space> za
 
 let g:ycm_autoclose_preview_window_after_completion=1
 map <leader>g :YcmCompleter GoToDefinitionElseDeclaration<CR>
+
+" CamelCaseMotion mappings
+call camelcasemotion#CreateMotionMappings('<leader>')
+
+" CtrlP exclude list.
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/](target|\.(git|hg|svn))$' }
+
+" Always enable rainbow parenthesis.
+au VimEnter *.clj RainbowParenthesesToggle
+au Syntax *.clj RainbowParenthesesLoadRound
+
 "python with virtualenv support
 py << EOF
 import os

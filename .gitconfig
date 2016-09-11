@@ -23,6 +23,7 @@
 	grep = grep -Ii
 	la = "!git config -l | grep alias | cut -c 7-"
 	f = fetch
+    	oldest-ancestor = !zsh -c 'diff --old-line-format='' --new-line-format='' <(git rev-list --first-parent "${1:-master}") <(git rev-list --first-parent "${2:-HEAD}") | head -1' -
 [color]
 	ui = true
 [merge]
@@ -30,9 +31,22 @@
 [core]
 	editor = vim
 	mergeoptions = --no-edit
+	autocrlf = false
 [difftool "sourcetree"]
 	cmd = /usr/local/Cellar/kdiff3/0.9.98/kdiff3.app/Contents/MacOS/kdiff3 \"$LOCAL\" \"$REMOTE\"
 	path = 
 [mergetool "sourcetree"]
 	cmd = /usr/local/Cellar/kdiff3/0.9.98/kdiff3.app/Contents/MacOS/kdiff3 \"$BASE\" \"$LOCAL\" \"$REMOTE\" -o \"$MERGED\"
 	trustExitCode = true
+[push]
+	default = simple
+[filter "lfs"]
+	smudge = git-lfs smudge -- %f
+	required = true
+	clean = git-lfs clean -- %f
+[mergetool "awesomemerge"]
+	cmd = java -jar /Users/dimitrijer/bin/awesomemerge.jar \"$BASE\" \"$LOCAL\" \"$REMOTE\" \"$MERGED\"
+	trustExitCode = true
+[merge "pddschema"]
+	name = Awesome Merge
+	driver = java -jar /Users/dimitrijer/bin/awesomemerge.jar %O %A %B %A
