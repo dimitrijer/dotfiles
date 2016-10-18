@@ -22,7 +22,7 @@ Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'nvie/vim-flake8'
 Plugin 'bling/vim-airline'
 Plugin 'flazz/vim-colorschemes'
-Plugin 'tomasr/molokai'
+" Plugin 'tomasr/molokai'
 Plugin 'godlygeek/tabular'
 " Clojure dev plugins
 Plugin 'tpope/vim-salve'
@@ -36,11 +36,15 @@ Plugin 'tpope/vim-sexp-mappings-for-regular-people'
 Plugin 'kien/rainbow_parentheses.vim'
 Plugin 'guns/vim-clojure-highlight'
 Plugin 'bkad/CamelCaseMotion'
+" Even though it's shipped with Vim, I'm adding this because of EDN files.
+Plugin 'guns/vim-clojure-static'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
 
-colorscheme molokai
+colorscheme gruvbox
+set background=dark
+
 " Use patched fonts for airline
 let g:airline_powerline_fonts = 1
 " Make airline show before the first split (i.e. all the time)
@@ -80,7 +84,6 @@ au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
 syntax on
 inoremap jk <ESC>
 let mapleader = "\<Space>"
-filetype plugin indent on
 set encoding=utf-8
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
@@ -113,7 +116,7 @@ set foldlevel=99
 
 " 80-line column.
 if exists('+colorcolumn')
-	set colorcolumn=120
+	set colorcolumn=80
 endif
 
 " Enable folding with the spacebar
@@ -132,6 +135,44 @@ let g:ctrlp_custom_ignore = {
 " Always enable rainbow parenthesis.
 au VimEnter * RainbowParenthesesToggle
 au Syntax * RainbowParenthesesLoadRound
+let g:rbpt_colorpairs = [
+    \ ['brown',       'RoyalBlue3'],
+    \ ['Darkblue',    'SeaGreen3'],
+    \ ['darkgray',    'DarkOrchid3'],
+    \ ['darkgreen',   'firebrick3'],
+    \ ['darkcyan',    'RoyalBlue3'],
+    \ ['darkred',     'SeaGreen3'],
+    \ ['darkmagenta', 'DarkOrchid3'],
+    \ ['brown',       'firebrick3'],
+    \ ['gray',        'RoyalBlue3'],
+    \ ['white',       'SeaGreen3'],
+    \ ['darkmagenta', 'DarkOrchid3'],
+    \ ['Darkblue',    'firebrick3'],
+    \ ['darkgreen',   'RoyalBlue3'],
+    \ ['darkcyan',    'SeaGreen3'],
+    \ ['darkred',     'DarkOrchid3'],
+    \ ['red',         'firebrick3'],
+    \ ]
+let g:rbpt_max = 16
+let g:rbpt_loadcmd_toggle = 0
+
+" Auto-reload Clojure source within REPL.
+au Filetype clojure nmap <C-c><C-k> :Require<cr>
+
+" Keep some lines within window when moving.
+set scrolloff=5
+
+" Set tabbing in SQL files.
+au Filetype sql setlocal tabstop=4 shiftwidth=4 expandtab
+
+" All right, chums, let's do this. Leeerooooy...
+noremap <Up> <nop>
+noremap <Down> <nop>
+noremap <Left> <nop>
+noremap <Right> <nop>
+
+" Use Mac OS clipboard.
+set clipboard=unnamed
 
 "python with virtualenv support
 py << EOF
