@@ -1,6 +1,5 @@
 set nocompatible              " required
 filetype off                  " required
-
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
@@ -19,28 +18,47 @@ Plugin 'scrooloose/syntastic'
 Plugin 'ctrlpvim/ctrlp.vim'
 " Plugin 'vim-scripts/indentpython.vim'
 " Plugin 'tmhedberg/SimpylFold'
-Plugin 'nvie/vim-flake8'
+" Plugin 'nvie/vim-flake8'
 Plugin 'bling/vim-airline'
 Plugin 'flazz/vim-colorschemes'
 " Plugin 'tomasr/molokai'
 Plugin 'godlygeek/tabular'
+" Haxe plugin
+Plugin 'jdonaldson/vaxe'
 " Clojure dev plugins
+" -> Leiningen support
 Plugin 'tpope/vim-salve'
-Plugin 'tpope/vim-projectionist'
+" -> Used for dispatching to lein
 Plugin 'tpope/vim-dispatch'
+" -> Magic Clojure support
 Plugin 'tpope/vim-fireplace'
+" -> Quick paren editing: cseb, ysiW, cse], dsb etc.
 Plugin 'tpope/vim-surround'
+" -> For using . for plugin command repeating as well.
 Plugin 'tpope/vim-repeat'
+" -> Selection and movement for compound forms and elements (vaf selects entire
+"  form, vae selects element, vas string etc.), == for indenting the entire
+"  form etc.
 Plugin 'guns/vim-sexp'
+" -> Self-explanatory.
 Plugin 'tpope/vim-sexp-mappings-for-regular-people'
+" -> Pretty paren.
 Plugin 'kien/rainbow_parentheses.vim'
+" -> Extended syntax highlighting.
 Plugin 'guns/vim-clojure-highlight'
-Plugin 'bkad/CamelCaseMotion'
-" Even though it's shipped with Vim, I'm adding this because of EDN files.
+" -> <bling> defn -> lambda symbol. </bling>
+Plugin 'calebsmith/vim-lambdify'
+" -> Even though it's shipped with Vim, I'm adding this because of EDN files.
 Plugin 'guns/vim-clojure-static'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
+
+" Unmap space from default <right>, map it to leader instead (ignore select
+" mode).
+nnoremap <SPACE> <Nop>
+map <SPACE> <Leader>
+sunmap <Space>
 
 colorscheme gruvbox
 set background=dark
@@ -83,7 +101,6 @@ au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
 "Stuff
 syntax on
 inoremap jk <ESC>
-let mapleader = "\<Space>"
 set encoding=utf-8
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
@@ -119,14 +136,15 @@ if exists('+colorcolumn')
 	set colorcolumn=80
 endif
 
-" Enable folding with the spacebar
-nnoremap <space> za
+" Enable folding with the comma
+nnoremap "," za
 
-let g:ycm_autoclose_preview_window_after_completion=1
-map <leader>g :YcmCompleter GoToDefinitionElseDeclaration<CR>
+" YCM stuff.
+" let g:ycm_autoclose_preview_window_after_completion=1
+" map <leader>g :YcmCompleter GoToDefinitionElseDeclaration<CR>
 
 " CamelCaseMotion mappings
-call camelcasemotion#CreateMotionMappings('<leader>')
+" call camelcasemotion#CreateMotionMappings('<leader>')
 
 " CtrlP exclude list.
 let g:ctrlp_custom_ignore = {
@@ -164,6 +182,8 @@ set scrolloff=5
 
 " Set tabbing in SQL files.
 au Filetype sql setlocal tabstop=4 shiftwidth=4 expandtab
+au Filetype cpp setlocal tabstop=4 shiftwidth=4 expandtab
+au Filetype c setlocal tabstop=4 shiftwidth=4 expandtab
 
 " All right, chums, let's do this. Leeerooooy...
 noremap <Up> <nop>
@@ -173,7 +193,8 @@ noremap <Right> <nop>
 
 " Use Mac OS clipboard.
 set clipboard=unnamed
-
+" Show leader-key activation.
+set showcmd
 "python with virtualenv support
 py << EOF
 import os
