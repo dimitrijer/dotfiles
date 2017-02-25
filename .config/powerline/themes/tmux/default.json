@@ -19,7 +19,11 @@
 				"priority": 80,
 				"args": {
 					"gamify": true,
-					"steps": 10
+					"steps": 5,
+					"online": "  ",
+					"full_heart": " ",
+					"empty_heart": " "
+
 				},
 				"before": "hp "
 			},
@@ -61,8 +65,9 @@
 			{
 				"function": "powerline.segments.common.net.hostname",
 				"args" : {
-					"only_if_ssh" : true
-				}
+					"exclude_domain": true
+				},
+				"priority": 200
 			}
 		]
 	}
