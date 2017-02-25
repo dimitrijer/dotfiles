@@ -1,0 +1,69 @@
+{
+	"segments": {
+		"right": [
+			{
+				"function": "powerline.segments.common.players.spotify",
+				"name": "player",
+				"priority": 100,
+				"args": {
+					"state_symbols": {
+						"pause": " ",
+						"play": " "
+					},
+					"format": "{state_symbol} {artist} - {title}"
+				},
+				"before": "  "
+			},
+			{
+				"function": "powerline.segments.common.bat.battery",
+				"priority": 80,
+				"args": {
+					"gamify": true,
+					"steps": 10
+				},
+				"before": "hp "
+			},
+			{
+				"function": "powerline.segments.common.sys.uptime",
+				"priority": 50,
+				"args": {
+					"shorten_len": 2
+				}
+			},
+			{
+				"function": "powerline.segments.common.net.network_load",
+				"priority": 50,
+				"args" : {
+					"si_prefix" : true,
+					"recv_format" : "   {value:>8}",
+					"sent_format" : "   {value:>8}"
+				}
+
+			},
+			{
+				"function": "powerline.segments.common.sys.system_load",
+				"priority": 30,
+				"before": "  "
+			},
+			{
+				"function": "powerline.segments.common.time.date",
+				"before": "  "
+			},
+			{
+				"function": "powerline.segments.common.time.date",
+				"name": "time",
+				"args": {
+					"format": "%H:%M",
+					"istime": true
+				},
+				"before" : "  "
+			},
+			{
+				"function": "powerline.segments.common.net.hostname",
+				"args" : {
+					"only_if_ssh" : true
+				}
+			}
+		]
+	}
+}
