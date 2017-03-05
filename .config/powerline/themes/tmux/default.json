@@ -4,7 +4,7 @@
 			{
 				"function": "powerline.segments.common.players.spotify",
 				"name": "player",
-				"priority": 100,
+				"priority": 300,
 				"args": {
 					"state_symbols": {
 						"pause": " ",
@@ -16,7 +16,7 @@
 			},
 			{
 				"function": "powerline.segments.common.bat.battery",
-				"priority": 80,
+				"priority": 200,
 				"args": {
 					"gamify": true,
 					"steps": 5,
@@ -51,23 +51,17 @@
 			},
 			{
 				"function": "powerline.segments.common.time.date",
-				"before": "  "
-			},
-			{
-				"function": "powerline.segments.common.time.date",
-				"name": "time",
+				"before": "  ",
 				"args": {
-					"format": "%H:%M",
-					"istime": true
-				},
-				"before" : "  "
+					"format": "%-d %b %Y"
+				}
 			},
 			{
 				"function": "powerline.segments.common.net.hostname",
 				"args" : {
 					"exclude_domain": true
 				},
-				"priority": 200
+				"priority": 250
 			}
 		]
 	}
