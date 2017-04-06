@@ -10,9 +10,9 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'gmarik/Vundle.vim'
 
-" Add all your plugins here (note older versions of Vundle used Bundle
-" instead of Plugin)
+" Add all your plugins here (note older versions of Vundle used Bundle " instead of Plugin)
 " Plugin 'Valloric/YouCompleteMe'
+Plugin 'scrooloose/nerdtree.git'
 Bundle 'chase/vim-ansible-yaml'
 Plugin 'scrooloose/syntastic'
 Plugin 'ctrlpvim/ctrlp.vim'
@@ -32,7 +32,7 @@ Plugin 'tpope/vim-salve'
 Plugin 'tpope/vim-dispatch'
 " -> Magic Clojure support
 Plugin 'tpope/vim-fireplace'
-" -> Quick paren editing: cseb, ysiW, cse], dsb etc.
+" -> Quick surround: ysiW etc.
 Plugin 'tpope/vim-surround'
 " -> For using . for plugin command repeating as well.
 Plugin 'tpope/vim-repeat'
@@ -40,7 +40,8 @@ Plugin 'tpope/vim-repeat'
 "  form, vae selects element, vas string etc.), == for indenting the entire
 "  form etc.
 Plugin 'guns/vim-sexp'
-" -> Self-explanatory.
+" -> Self-explanatory, contains some mappings for vim-surround as well (dsb,
+"  csb, cse{ etc.)
 Plugin 'tpope/vim-sexp-mappings-for-regular-people'
 " -> Pretty paren.
 Plugin 'kien/rainbow_parentheses.vim'
@@ -59,6 +60,9 @@ filetype plugin indent on    " required
 nnoremap <SPACE> <Nop>
 map <SPACE> <Leader>
 sunmap <Space>
+
+" Allow switching between dirty buffers without saving contents first.
+set hidden
 
 colorscheme gruvbox
 set background=dark
@@ -97,6 +101,8 @@ autocmd BufNewFile,BufRead *.py
 " Mark bad whitespace
 highlight BadWhitespace ctermbg=red guibg=red
 au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
+
+highlight Conceal ctermfg=58 ctermbg=NONE
 
 "Stuff
 syntax on
@@ -176,6 +182,7 @@ let g:rbpt_loadcmd_toggle = 0
 
 " Auto-reload Clojure source within REPL.
 au Filetype clojure nmap <C-c><C-k> :Require<cr>
+au Filetype clojure setlocal textwidth=80
 
 " Keep some lines within window when moving.
 set scrolloff=5
@@ -190,6 +197,16 @@ noremap <Up> <nop>
 noremap <Down> <nop>
 noremap <Left> <nop>
 noremap <Right> <nop>
+
+" Use . for each line of visual block
+vnoremap . :normal .<CR>
+
+" NERDTree shortcut
+map <C-o> :NERDTreeToggle<CR>
+
+" Open NERDTree automatically if no files were specified
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
 " Use Mac OS clipboard.
 set clipboard=unnamed
