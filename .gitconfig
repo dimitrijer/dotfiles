@@ -33,13 +33,14 @@
 	mergeoptions = --no-edit
 	autocrlf = false
 [difftool "sourcetree"]
-	cmd = /usr/local/Cellar/kdiff3/0.9.98/kdiff3.app/Contents/MacOS/kdiff3 \"$LOCAL\" \"$REMOTE\"
+	cmd = /Applications/kdiff3.app/Contents/MacOS/kdiff3 \"$LOCAL\" \"$REMOTE\"
 	path = 
 [mergetool "sourcetree"]
-	cmd = /usr/local/Cellar/kdiff3/0.9.98/kdiff3.app/Contents/MacOS/kdiff3 \"$BASE\" \"$LOCAL\" \"$REMOTE\" -o \"$MERGED\"
+	cmd = /Applications/kdiff3.app/Contents/MacOS/kdiff3 \"$BASE\" \"$LOCAL\" \"$REMOTE\" -o \"$MERGED\"
 	trustExitCode = true
 [push]
 	default = simple
+	recurseSubmodules = check
 [filter "lfs"]
 	smudge = git-lfs smudge -- %f
 	required = true
@@ -50,3 +51,10 @@
 [merge "pddschema"]
 	name = Awesome Merge
 	driver = java -jar /Users/dimitrijer/bin/awesomemerge.jar %O %A %B %A
+[sendemail]
+	smtpencryption = tls
+	smtpserver = smtp.gmail.com
+	smtpserverport = 587
+	smtpuser = dimitrijer@nordeus.com
+	from = dimitrijer@nordeus.com
+	smtpsslcertpath = /etc/ssl/cert.pem
