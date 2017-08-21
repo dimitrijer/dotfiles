@@ -1,3 +1,4 @@
 **/*.crt
 **/*.key
 **/auth.conf
+**/.DS_Store
