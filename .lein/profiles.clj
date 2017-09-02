@@ -8,4 +8,6 @@
                        [slamhound "1.5.5"]]
         :injections [(require 'pjstadig.humane-test-output)
                      (pjstadig.humane-test-output/activate!)]
-        :aliases {"slamhound" ["run" "-m" "slam.hound"]}}}
+        :aliases {"slamhound" ["run" "-m" "slam.hound"]}}
+ :auth {:repository-auth {#"nexus\.hq\.nordeus\.com" {:username "######"
+                                                      :password "######"}}}}
