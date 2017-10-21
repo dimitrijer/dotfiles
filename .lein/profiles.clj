@@ -10,6 +10,6 @@
                      (pjstadig.humane-test-output/activate!)]
         :aliases {"slamhound" ["run" "-m" "slam.hound"]}
         :mirrors {#".+" {:name "nordeus-nexus"
-                         :url "https://nexus.hq.nordeus.com/content/groups/public/"}}
- :auth {:repository-auth {#"nexus\.hq\.nordeus\.com" {:username "#########"
-                                                      :password "#########" }}}}
+                         :url "https://nexus.hq.nordeus.com/content/groups/public/"}}}
+ :auth {:repository-auth {#"nexus\.hq\.nordeus\.com" {:username "#######"
+                                                      :password "#######" }}}}
