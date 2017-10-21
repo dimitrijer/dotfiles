@@ -20,7 +20,6 @@ Plugin 'ctrlpvim/ctrlp.vim'
 " Plugin 'tmhedberg/SimpylFold'
 " Plugin 'nvie/vim-flake8'
 Plugin 'bling/vim-airline'
-Plugin 'flazz/vim-colorschemes'
 " Plugin 'tomasr/molokai'
 Plugin 'godlygeek/tabular'
 " Haxe plugin
@@ -51,9 +50,14 @@ Plugin 'guns/vim-clojure-highlight'
 Plugin 'calebsmith/vim-lambdify'
 " -> Even though it's shipped with Vim, I'm adding this because of EDN files.
 Plugin 'guns/vim-clojure-static'
+Plugin 'flazz/vim-colorschemes'
+Plugin 'guns/vim-slamhound'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
+
+set background=dark
+colorscheme gruvbox
 
 " Unmap space from default <right>, map it to leader instead (ignore select
 " mode).
@@ -63,9 +67,6 @@ sunmap <Space>
 
 " Allow switching between dirty buffers without saving contents first.
 set hidden
-
-colorscheme gruvbox
-set background=dark
 
 " Use patched fonts for airline
 let g:airline_powerline_fonts = 1
@@ -192,6 +193,8 @@ au Filetype sql setlocal tabstop=4 shiftwidth=4 expandtab
 au Filetype cpp setlocal tabstop=4 shiftwidth=4 expandtab
 au Filetype c setlocal tabstop=4 shiftwidth=4 expandtab
 
+au Filetype asciidoc setlocal textwidth=79
+
 " All right, chums, let's do this. Leeerooooy...
 noremap <Up> <nop>
 noremap <Down> <nop>
@@ -202,7 +205,9 @@ noremap <Right> <nop>
 vnoremap . :normal .<CR>
 
 " NERDTree shortcut
-map <C-o> :NERDTreeToggle<CR>
+map <C-k> :NERDTreeToggle<CR>
+map <C-a> :NERDTreeFind<CR>
+let NERDTreeMapActivateNode='<space>'
 
 " Open NERDTree automatically if no files were specified
 autocmd StdinReadPre * let s:std_in=1
@@ -212,6 +217,7 @@ autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 set clipboard=unnamed
 " Show leader-key activation.
 set showcmd
+
 "python with virtualenv support
 py << EOF
 import os
