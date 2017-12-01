@@ -4,13 +4,15 @@ ZSH_THEME="crunch"
 ENABLE_CORRECTION="true"
 COMPLETION_WAITING_DOTS="true"
 
-plugins=(brew terminalapp history history-substring-search docker)
+plugins=(maven brew terminalapp history history-substring-search docker lein)
 
 source $ZSH/oh-my-zsh.sh
 
 export LANG=en_US.UTF-8
 export PATH="/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 export SSH_KEY_PATH="~/.ssh/id_ed25519"
+export LESSCHARSET=UTF-8
+export EDITOR='vim'
 
 alias ll="exa -alhbg --git --color=auto"
 alias ls="exa --color=auto"
@@ -19,6 +21,7 @@ alias gg="git gui"
 alias less='less -m -N -g -i -J --line-numbers --underline-special'
 alias more='less'
 alias irssi="TERM=screen-256color irssi"
+alias igrep='grep -i'
 
 # Use GNU utils instead of BSD
 export PATH="/Users/dimitrijer/bin:/usr/local/opt/coreutils/libexec/gnubin:/usr/local/opt/python/libexec/bin:/usr/local/opt/curl/bin:$PATH"
@@ -29,7 +32,6 @@ export HOMEBREW_GITHUB_API_TOKEN="###################################"
 fpath=(/usr/local/share/zsh-completions $fpath)
 
 export JAVA_HOME=$(/usr/libexec/java_home)
-export EDITOR='vim'
 export DEVEREL_HOME="/Users/dimitrijer/bin/deverel"
 export PATH="$DEVEREL_HOME:$PATH"
 export ANSIBLE_LIBRARY=/Users/dimitrijer/git/ansible/nordeus_modules
