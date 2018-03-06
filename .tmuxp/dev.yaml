@@ -1,0 +1,14 @@
+session_name: dev
+windows:
+- layout: c135,148x111,0,0[148x95,0,0,0,148x15,0,96{74x15,0,96,1,73x15,75,96,2}]
+  window_name: git
+  shell_command_before:
+    - cd ~/
+  panes:
+  - shell_command:
+    - tmux clock-mode -t 2
+    - cd /Users/dimitrijer/git
+    - clear
+    focus: true
+  - shell_command: watch --color -t -n 5 "todo.sh lsa"
+  - blank
