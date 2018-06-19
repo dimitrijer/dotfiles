@@ -11,16 +11,18 @@ call vundle#begin()
 Plugin 'gmarik/Vundle.vim'
 
 " Add all your plugins here (note older versions of Vundle used Bundle " instead of Plugin)
+Plugin 'exuberant-ctags/ctags'
+Plugin 'majutsushi/tagbar'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'scrooloose/nerdtree.git'
-Bundle 'chase/vim-ansible-yaml'
 Plugin 'scrooloose/syntastic'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'bling/vim-airline'
 " Plugin 'tomasr/molokai'
-Plugin 'godlygeek/tabular'
+" Aligning text
+" Plugin 'godlygeek/tabular'
 " Haxe plugin
-Plugin 'jdonaldson/vaxe'
+" Plugin 'jdonaldson/vaxe'
 " Clojure dev plugins
 " -> Leiningen support
 Plugin 'tpope/vim-salve'
@@ -50,6 +52,7 @@ Plugin 'guns/vim-clojure-static'
 Plugin 'flazz/vim-colorschemes'
 Plugin 'guns/vim-slamhound'
 Plugin 'pearofducks/ansible-vim'
+Plugin 'python-mode/python-mode'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -79,6 +82,9 @@ let g:airline#extensions#tabline#fnamemod = ':t'
 " See docstrings for folded code
 let g:SimpylFold_docstring_preview=1
 
+" Python3 highlighting
+let g:pymode_python = 'python3'
+
 " PEP8 indentation
 autocmd BufNewFile,BufRead *.py |
     \ set tabstop=4 |
@@ -104,6 +110,22 @@ set encoding=utf-8
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
 
+" To open a new empty buffer
+nmap <leader>T :enew<cr>
+
+" Move to the next buffer
+nmap <leader>l :bnext<CR>
+
+" Move to the previous buffer
+nmap <leader>h :bprevious<CR>
+
+" Close the current buffer and move to the previous one
+" This replicates the idea of closing a tab
+nmap <leader>bq :bp <BAR> bd #<CR>
+
+" Show all open buffers and their status
+nmap <leader>bl :ls<CR>
+
 " proper tabs
 set tabstop=4
 set shiftwidth=4
@@ -120,17 +142,25 @@ set cursorline
 set showmatch
 
 " enable all Python syntax highlighting features
-let python_highlight_all = 1
+" let python_highlight_all = 1
 
 " Set default split behaviour
 set splitbelow
 set splitright
+
+" Keep some lines within window when moving.
+set scrolloff=5
+
+" Highlight matching words and move during search.
+set hlsearch
+set incsearch
 
 " Split keybinding
 " nnoremap <C-J> <C-W><C-J>
 " nnoremap <C-K> <C-W><C-K>
 " nnoremap <C-L> <C-W><C-L>
 " nnoremap <C-R> <C-W><C-H>
+
 
 " Arrows for resizing
 nnoremap <Up>    :resize +2<CR>
@@ -191,8 +221,6 @@ au Filetype clojure setlocal textwidth=80
 
 au Filetype java setlocal tabstop=4 shiftwidth=4 expandtab
 
-" Keep some lines within window when moving.
-set scrolloff=5
 
 " Set tabbing in SQL files.
 au Filetype sql setlocal tabstop=4 shiftwidth=4 expandtab
@@ -212,6 +240,9 @@ map <C-k> :NERDTreeToggle<CR>
 map <C-a> :NERDTreeFind<CR>
 let NERDTreeMapActivateNode='<space>'
 
+" Tagbar toggle
+nmap <F8> :TagbarToggle<CR>
+
 " Open NERDTree automatically if no files were specified
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
@@ -221,6 +252,3 @@ set clipboard=unnamed
 " Show leader-key activation.
 set showcmd
 
-" Highlight matching words and move during search.
-set hlsearch
-set incsearch
