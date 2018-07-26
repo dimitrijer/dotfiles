@@ -1,4 +1,5 @@
 set nocompatible              " required
+
 filetype off                  " required
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -11,14 +12,20 @@ call vundle#begin()
 Plugin 'gmarik/Vundle.vim'
 
 " Add all your plugins here (note older versions of Vundle used Bundle " instead of Plugin)
-Plugin 'exuberant-ctags/ctags'
-Plugin 'majutsushi/tagbar'
-Plugin 'Valloric/YouCompleteMe'
+" Plugin 'majutsushi/tagbar'
+" Plugin 'Valloric/YouCompleteMe'
 Plugin 'scrooloose/nerdtree.git'
-Plugin 'scrooloose/syntastic'
+Plugin 'vim-syntastic/syntastic'
 Plugin 'ctrlpvim/ctrlp.vim'
-Plugin 'bling/vim-airline'
-" Plugin 'tomasr/molokai'
+Plugin 'vim-airline/vim-airline'
+" Airline swag
+Plugin 'vim-airline/vim-airline-themes'
+" Vim swag
+Plugin 'flazz/vim-colorschemes'
+" Python development
+" -> python mode (linting)
+" Plugin 'python-mode/python-mode'
+" Plugin 'exuberant-ctags/ctags'
 " Aligning text
 " Plugin 'godlygeek/tabular'
 " Haxe plugin
@@ -46,19 +53,21 @@ Plugin 'kien/rainbow_parentheses.vim'
 " -> Extended syntax highlighting.
 Plugin 'guns/vim-clojure-highlight'
 " -> <bling> defn -> lambda symbol. </bling>
+Plugin 'guns/vim-slamhound'
 Plugin 'calebsmith/vim-lambdify'
 " -> Even though it's shipped with Vim, I'm adding this because of EDN files.
 Plugin 'guns/vim-clojure-static'
-Plugin 'flazz/vim-colorschemes'
-Plugin 'guns/vim-slamhound'
 Plugin 'pearofducks/ansible-vim'
-Plugin 'python-mode/python-mode'
+Plugin 'ryanoasis/vim-devicons'
+" Plugin 'hdima/python-syntax'
+Plugin 'kh3phr3n/python-syntax'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
 
 set background=dark
-colorscheme gruvbox
+colorscheme Tomorrow-Night
+let g:airline_theme = 'tomorrow'
 
 " Unmap space from default <right>, map it to leader instead (ignore select
 " mode).
@@ -71,8 +80,10 @@ set hidden
 
 " Use patched fonts for airline
 let g:airline_powerline_fonts = 1
+
 " Make airline show before the first split (i.e. all the time)
 set laststatus=2
+
 " Enable the list of buffers
 let g:airline#extensions#tabline#enabled = 1
 
@@ -114,10 +125,10 @@ set backspace=indent,eol,start
 nmap <leader>T :enew<cr>
 
 " Move to the next buffer
-nmap <leader>l :bnext<CR>
+nmap <leader>n :bnext<CR>
 
 " Move to the previous buffer
-nmap <leader>h :bprevious<CR>
+nmap <leader>p :bprevious<CR>
 
 " Close the current buffer and move to the previous one
 " This replicates the idea of closing a tab
@@ -136,13 +147,12 @@ set expandtab
 set number
 
 " show a visual line under the cursor's current line
-set cursorline
+" slows down a LOT
+" set cursorline
 
 " show the matching part of the pair for [] {} and ()
 set showmatch
 
-" enable all Python syntax highlighting features
-" let python_highlight_all = 1
 
 " Set default split behaviour
 set splitbelow
@@ -163,10 +173,10 @@ set incsearch
 
 
 " Arrows for resizing
-nnoremap <Up>    :resize +2<CR>
-nnoremap <Down>  :resize -2<CR>
-nnoremap <Left>  :vertical resize -2<CR>
-nnoremap <Right> :vertical resize +2<CR>
+nnoremap <Up>    :resize -2<CR>
+nnoremap <Down>  :resize +2<CR>
+nnoremap <Left>  :vertical resize +2<CR>
+nnoremap <Right> :vertical resize -2<CR>
 
 " Enable folding
 set foldmethod=indent
@@ -252,3 +262,4 @@ set clipboard=unnamed
 " Show leader-key activation.
 set showcmd
 
+let python_highlight_all = 1
