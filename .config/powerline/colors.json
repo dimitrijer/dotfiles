@@ -15,7 +15,8 @@
 		"brightcyan": 159,
 
 		"darkestblue": 24,
-		"darkblue": 31,
+        "darkblueold": 31,
+		"darkblue": 69,
 
 		"red": 1,
 		"darkestred": 52,
