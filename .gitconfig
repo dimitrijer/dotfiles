@@ -11,13 +11,13 @@
 	br = branch
 	lnc = log --pretty=format:"%h\\ %s\\ [%cn]"
 	filelog = log -u
-	dr  = "!f() { git diff "$1"^.."$1"; }; f"
-	diffr  = "!f() { git diff "$1"^.."$1"; }; f"
+	dr = "!f() { git diff "$1"^.."$1"; }; f"
+	diffr = "!f() { git diff "$1"^.."$1"; }; f"
 	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %Cblue%an%Creset' --abbrev-commit
 	grep = grep -Ii --recurse-submodules
 	la = "!git config -l | grep alias | cut -c 7-"
 	f = fetch
-    oldest-ancestor = !zsh -c 'diff --old-line-format='' --new-line-format='' <(git rev-list --first-parent "${1:-master}") <(git rev-list --first-parent "${2:-HEAD}") | head -1' -
+	oldest-ancestor = !zsh -c 'diff --old-line-format='' --new-line-format='' <(git rev-list --first-parent "${1:-master}") <(git rev-list --first-parent "${2:-HEAD}") | head -1' -
 [color]
 	ui = true
 [merge]
@@ -27,8 +27,8 @@
 	mergeoptions = --no-edit
 	autocrlf = input
 [pager]
-    diff = diff-so-fancy | less --tabs=1,5 -RFX
-    show = diff-so-fancy | less --tabs=1,5 -RFX
+	diff = diff-so-fancy | less --tabs=1,5 -RFX
+	show = diff-so-fancy | less --tabs=1,5 -RFX
 [push]
 	default = simple
 	recurseSubmodules = check
