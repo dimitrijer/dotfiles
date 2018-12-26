@@ -25,8 +25,10 @@
 [core]
 	editor = vim
 	mergeoptions = --no-edit
-	autocrlf = false
-	pager = diff-so-fancy | less --tabs=4 -RFX
+	autocrlf = input
+[pager]
+    diff = diff-so-fancy | less --tabs=1,5 -RFX
+    show = diff-so-fancy | less --tabs=1,5 -RFX
 [push]
 	default = simple
 	recurseSubmodules = check
@@ -34,6 +36,7 @@
 	smudge = git-lfs smudge -- %f
 	required = true
 	clean = git-lfs clean -- %f
+	process = git-lfs filter-process
 [sendemail]
 	smtpencryption = tls
 	smtpserver = smtp.gmail.com
@@ -53,3 +56,10 @@
 	old = red bold
 	new = green bold
 	whitespace = red reverse
+[gui]
+	encoding = utf-8
+	gcwarning = false
+[rebase]
+	autoStash = true
+[pull]
+	rebase = true
