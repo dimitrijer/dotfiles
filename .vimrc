@@ -61,12 +61,13 @@ Plugin 'pearofducks/ansible-vim'
 Plugin 'ryanoasis/vim-devicons'
 " Plugin 'hdima/python-syntax'
 Plugin 'kh3phr3n/python-syntax'
+Plugin 'chriskempson/base16-vim'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
 
 set background=dark
-colorscheme Tomorrow-Night
+colorscheme base16-tomorrow-night
 let g:airline_theme = 'tomorrow'
 
 " Unmap space from default <right>, map it to leader instead (ignore select
