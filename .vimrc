@@ -62,6 +62,8 @@ Plugin 'ryanoasis/vim-devicons'
 " Plugin 'hdima/python-syntax'
 Plugin 'kh3phr3n/python-syntax'
 Plugin 'chriskempson/base16-vim'
+Plugin 'pboettch/vim-cmake-syntax'
+Plugin 'Vimjas/vim-python-pep8-indent'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -262,5 +264,17 @@ autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 set clipboard=unnamed
 " Show leader-key activation.
 set showcmd
+
+" Syntastic default config
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+let g:syntastic_python_python_exec = '/usr/local/bin/python3'
+let g:syntastic_python_checkers=['python', 'flake8']
 
 let python_highlight_all = 1
