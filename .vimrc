@@ -21,7 +21,7 @@ Plugin 'vim-airline/vim-airline'
 " Airline swag
 Plugin 'vim-airline/vim-airline-themes'
 " Vim swag
-Plugin 'flazz/vim-colorschemes'
+" Plugin 'flazz/vim-colorschemes'
 " Python development
 " -> python mode (linting)
 " Plugin 'python-mode/python-mode'
@@ -69,8 +69,11 @@ call vundle#end()            " required
 filetype plugin indent on    " required
 
 set background=dark
-colorscheme base16-tomorrow-night
-let g:airline_theme = 'tomorrow'
+if filereadable(expand("~/.vimrc_background"))
+  let base16colorspace=256
+  source ~/.vimrc_background
+endif
+let g:airline_theme = 'base16_tomorrow'
 
 " Unmap space from default <right>, map it to leader instead (ignore select
 " mode).
@@ -203,6 +206,7 @@ nnoremap "," za
 " CtrlP exclude list.
 let g:ctrlp_custom_ignore = {
   \ 'dir':  '\v[\/](target|\.(git|hg|svn))$' }
+let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files . -co --exclude-standard', 'find %s -type f']
 
 " Always enable rainbow parenthesis.
 au VimEnter * RainbowParenthesesToggle
@@ -276,5 +280,4 @@ let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 let g:syntastic_python_python_exec = '/usr/local/bin/python3'
 let g:syntastic_python_checkers=['python', 'flake8']
-
 let python_highlight_all = 1
