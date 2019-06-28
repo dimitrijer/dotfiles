@@ -5,65 +5,56 @@ filetype off                  " required
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
-
 " let Vundle manage Vundle, required
 Plugin 'gmarik/Vundle.vim'
 
 " Add all your plugins here (note older versions of Vundle used Bundle " instead of Plugin)
-" Plugin 'majutsushi/tagbar'
-" Plugin 'Valloric/YouCompleteMe'
+"
+" Bare necessities
 Plugin 'scrooloose/nerdtree.git'
 Plugin 'vim-syntastic/syntastic'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'vim-airline/vim-airline'
-" Airline swag
-Plugin 'vim-airline/vim-airline-themes'
-" Vim swag
-" Plugin 'flazz/vim-colorschemes'
+
 " Python development
-" -> python mode (linting)
-" Plugin 'python-mode/python-mode'
-" Plugin 'exuberant-ctags/ctags'
-" Aligning text
-" Plugin 'godlygeek/tabular'
-" Haxe plugin
-" Plugin 'jdonaldson/vaxe'
-" Clojure dev plugins
-" -> Leiningen support
-Plugin 'tpope/vim-salve'
-" -> Used for dispatching to lein
-Plugin 'tpope/vim-dispatch'
-" -> Magic Clojure support
-Plugin 'tpope/vim-fireplace'
-" -> Quick surround: ysiW etc.
-Plugin 'tpope/vim-surround'
-" -> For using . for plugin command repeating as well.
-Plugin 'tpope/vim-repeat'
-" -> Selection and movement for compound forms and elements (vaf selects entire
-"  form, vae selects element, vas string etc.), == for indenting the entire
-"  form etc.
-Plugin 'guns/vim-sexp'
-" -> Self-explanatory, contains some mappings for vim-surround as well (dsb,
-"  csb, cse{ etc.)
-Plugin 'tpope/vim-sexp-mappings-for-regular-people'
-" -> Pretty paren.
-Plugin 'kien/rainbow_parentheses.vim'
-" -> Extended syntax highlighting.
-Plugin 'guns/vim-clojure-highlight'
-" -> <bling> defn -> lambda symbol. </bling>
-Plugin 'guns/vim-slamhound'
-Plugin 'calebsmith/vim-lambdify'
-" -> Even though it's shipped with Vim, I'm adding this because of EDN files.
-Plugin 'guns/vim-clojure-static'
-Plugin 'pearofducks/ansible-vim'
-Plugin 'ryanoasis/vim-devicons'
-" Plugin 'hdima/python-syntax'
-Plugin 'kh3phr3n/python-syntax'
+Plugin 'python-mode/python-mode'
+Plugin 'kh3phr3n/python-syntax'        " Better highlighting
+Plugin 'Vimjas/vim-python-pep8-indent' " Better python indent
+Plugin 'tmhedberg/SimpylFold'          " Better folding
+
+" Clojure development
+Plugin 'tpope/vim-salve'              " Lein support
+Plugin 'tpope/vim-dispatch'           " Run builds, tests, etc. in tmux, screen...
+Plugin 'tpope/vim-fireplace'          " REPL integration
+Plugin 'tpope/vim-surround'           " Quick surround: ysiW etc.
+Plugin 'tpope/vim-repeat'             " Use . for plugin command repetition, too
+Plugin 'guns/vim-sexp'                " Selection and movement for compound forms and elements
+                                      " (vaf selects entire form, vae selects element, vas
+                                      " string etc.), == for indenting the entire form etc.
+Plugin 'tpope/vim-sexp-mappings-for-regular-people' " dsb, csb, cse{ ...
+Plugin 'kien/rainbow_parentheses.vim' " Pretty paren
+Plugin 'guns/vim-clojure-highlight'   " More highlighting
+Plugin 'guns/vim-slamhound'           " Slamhound namespace mangler integration
+Plugin 'guns/vim-clojure-static'      " EDN files support
+
+" Swag
 Plugin 'chriskempson/base16-vim'
-Plugin 'pboettch/vim-cmake-syntax'
-Plugin 'Vimjas/vim-python-pep8-indent'
+Plugin 'vim-airline/vim-airline-themes'
+Plugin 'ryanoasis/vim-devicons'       " Pretty icons in NERDtree
+Plugin 'calebsmith/vim-lambdify'      " -> <bling> defn -> lambda symbol. </bling>
+
+" Syntax support
+Plugin 'pearofducks/ansible-vim'      " Ansible YAML
+Plugin 'cespare/vim-toml'             " TOML for poetry
+Plugin 'pboettch/vim-cmake-syntax'    " CMake
+
+
+" Unused
+" Plugin 'majutsushi/tagbar'      " Right side code markers (methods, vars, ...)
+" Plugin 'Valloric/YouCompleteMe' " Code-completion with shitload of required plugins
+" Plugin 'godlygeek/tabular'      " Aligning table-like text
+" Plugin 'jdonaldson/vaxe'        " Haxe plugin
+"
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -73,6 +64,7 @@ if filereadable(expand("~/.vimrc_background"))
   let base16colorspace=256
   source ~/.vimrc_background
 endif
+
 let g:airline_theme = 'base16_tomorrow'
 
 " Unmap space from default <right>, map it to leader instead (ignore select
@@ -159,7 +151,6 @@ set number
 " show the matching part of the pair for [] {} and ()
 set showmatch
 
-
 " Set default split behaviour
 set splitbelow
 set splitright
@@ -177,12 +168,11 @@ set incsearch
 " nnoremap <C-L> <C-W><C-L>
 " nnoremap <C-R> <C-W><C-H>
 
-
 " Arrows for resizing
 nnoremap <Up>    :resize -2<CR>
 nnoremap <Down>  :resize +2<CR>
-nnoremap <Left>  :vertical resize +2<CR>
-nnoremap <Right> :vertical resize -2<CR>
+nnoremap <Left>  :vertical resize -2<CR>
+nnoremap <Right> :vertical resize +2<CR>
 
 " Enable folding
 set foldmethod=indent
@@ -205,8 +195,10 @@ nnoremap "," za
 
 " CtrlP exclude list.
 let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\v[\/](target|\.(git|hg|svn))$' }
-let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files . -co --exclude-standard', 'find %s -type f']
+  \ 'dir':  '\v[\/](target|\.(git|hg|svn|venv))$' }
+
+" CtrlP tags search
+nnoremap <leader>. :CtrlPTag<cr>
 
 " Always enable rainbow parenthesis.
 au VimEnter * RainbowParenthesesToggle
@@ -238,7 +230,6 @@ au Filetype clojure setlocal textwidth=80
 
 au Filetype java setlocal tabstop=4 shiftwidth=4 expandtab
 
-
 " Set tabbing in SQL files.
 au Filetype sql setlocal tabstop=4 shiftwidth=4 expandtab
 au Filetype cpp setlocal tabstop=4 shiftwidth=4 expandtab
@@ -256,9 +247,10 @@ vnoremap . :normal .<CR>
 map <C-k> :NERDTreeToggle<CR>
 map <C-a> :NERDTreeFind<CR>
 let NERDTreeMapActivateNode='<space>'
+let g:NERDTreeNodeDelimiter = "\u00a0"
 
 " Tagbar toggle
-nmap <F8> :TagbarToggle<CR>
+" nmap <F8> :TagbarToggle<CR>
 
 " Open NERDTree automatically if no files were specified
 autocmd StdinReadPre * let s:std_in=1
@@ -279,5 +271,9 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 let g:syntastic_python_python_exec = '/usr/local/bin/python3'
-let g:syntastic_python_checkers=['python', 'flake8']
+let g:syntastic_python_checkers=['flake8']
+
+" Let syntastic do all linting.
+let g:pymode_lint = 0
+
 let python_highlight_all = 1
