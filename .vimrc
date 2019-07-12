@@ -161,6 +161,9 @@ set scrolloff=5
 " Highlight matching words and move during search.
 set hlsearch
 set incsearch
+" Smarter case-sensitive search
+set ignorecase
+set smartcase
 
 " Split keybinding
 " nnoremap <C-J> <C-W><C-J>
@@ -171,20 +174,18 @@ set incsearch
 " Arrows for resizing
 nnoremap <Up>    :resize -2<CR>
 nnoremap <Down>  :resize +2<CR>
-nnoremap <Left>  :vertical resize -2<CR>
-nnoremap <Right> :vertical resize +2<CR>
+nnoremap <Left>  :vertical resize +2<CR>
+nnoremap <Right> :vertical resize -2<CR>
 
 " Enable folding
-set foldmethod=indent
+" set foldmethod=indent
+" Do not fold regions automatically
 set foldlevel=99
 
 " 80-line column.
 if exists('+colorcolumn')
 	set colorcolumn=80
 endif
-
-" Enable folding with the comma
-nnoremap "," za
 
 " YCM stuff.
 " let g:ycm_autoclose_preview_window_after_completion=1
@@ -195,7 +196,7 @@ nnoremap "," za
 
 " CtrlP exclude list.
 let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\v[\/](target|\.(git|hg|svn|venv))$' }
+  \ 'dir':  '\v[\/](target|\.(git|hg|svn|venv)|__pycache__)$' }
 
 " CtrlP tags search
 nnoremap <leader>. :CtrlPTag<cr>
@@ -277,3 +278,17 @@ let g:syntastic_python_checkers=['flake8']
 let g:pymode_lint = 0
 
 let python_highlight_all = 1
+
+" Toggle folding with space comma
+nnoremap <leader>, za
+
+" Faster rendering
+set ttyfast
+
+" Toggle paste mode
+set pastetoggle=<F9>
+
+" Blink cursor on error instead of beeping
+set visualbell
+
+nnoremap <leader>f gqip
