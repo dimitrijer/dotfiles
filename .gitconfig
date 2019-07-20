@@ -21,7 +21,8 @@
 [color]
 	ui = true
 [merge]
-	tool = kdiff3
+	tool = vimdiff
+	conflictstyle = diff3
 [core]
 	editor = vim
 	mergeoptions = --no-edit
@@ -63,3 +64,5 @@
 	autoStash = true
 [pull]
 	rebase = true
+[mergetool]
+	prompt = false
