@@ -1,3 +1,7 @@
+"""
+""" Vundle config starts here
+"""
+
 set nocompatible              " required
 
 filetype off                  " required
@@ -59,40 +63,136 @@ Plugin 'pboettch/vim-cmake-syntax'    " CMake
 call vundle#end()            " required
 filetype plugin indent on    " required
 
+"""
+""" Vim general options start here
+"""
+
+" Default encoding
+set encoding=utf-8
+
+" Disable mouse
+set mouse=""
+
+" Faster rendering (push more characters through to the terminal per cycle)
+set ttyfast
+
+" Enable syntax highlighting
+syntax on
+" Don't highlight long lines
+set synmaxcol=256
+
+" Proper tabs (common languages/format)
+set tabstop=4
+set shiftwidth=4
+set smarttab
+set expandtab
+" Visually indent wrapped lines, thus preserving horizontal blocks of text
+set breakindent
+
+" Auto-update if changes are detected
+set autoread
+
+" Allow switching between dirty buffers without saving contents first
+set hidden
+
+" Show the matching part of the pair for [] {} and ()
+set showmatch
+
+" Set default split behaviour
+set splitbelow
+set splitright
+
+" Show line numbers
+set number
+
+" Enable relative line numbers
+set rnu
+
+" Keep some lines within window when moving
+set scrolloff=5
+
+" Highlight matching words and move during search
+set hlsearch
+set incsearch
+" Smarter case-sensitive search
+set ignorecase
+set smartcase
+
+" Assume s/../../g
+set gdefault
+
+" 80-line column
+if exists('+colorcolumn')
+	set colorcolumn=80
+endif
+
+" Allow backspacing over everything in insert mode
+set backspace=indent,eol,start
+
+" Show a visual line under the cursor's current line (slows down a LOT)
+" set cursorline
+
+" Blink cursor on error instead of beeping
+set visualbell
+
+" Enable folding
+" set foldmethod=indent
+" Do not fold regions automatically
+set foldlevel=99
+
+" Use OS X clipboard
+set clipboard=unnamed
+
+" Show leader-key activation
+set showcmd
+
+" Highlight bad whitespace, folded regions and conceal
+highlight BadWhitespace ctermbg=red guibg=red
+highlight Folded ctermfg=darkgrey ctermbg=NONE
+highlight Conceal ctermfg=58 ctermbg=NONE
+
+" Always display status line
+set laststatus=2
+
+" Dark mode
 set background=dark
 if filereadable(expand("~/.vimrc_background"))
   let base16colorspace=256
   source ~/.vimrc_background
 endif
 
-let g:airline_theme = 'base16_tomorrow'
+" Protect against crash-during-write...
+set writebackup
+" ... but do not persist backup after successful write
+set nobackup
 
-" Unmap space from default <right>, map it to leader instead (ignore select
-" mode).
-nnoremap <SPACE> <Nop>
-map <SPACE> <Leader>
-sunmap <Space>
+" Use rename-and-write-new method whenever safe
+set backupcopy=auto
 
-" Allow switching between dirty buffers without saving contents first.
-set hidden
+" Protect changes between writes. Default values of updatecount (200
+" keystrokes) and updatetime (4 seconds) are fine
+set swapfile
 
-" Use patched fonts for airline
-let g:airline_powerline_fonts = 1
+" Persist the undo tree for each file
+set undofile
 
-" Make airline show before the first split (i.e. all the time)
-set laststatus=2
+" Patch required to honor double slash at end
+if has("patch-8.1.0251")
+	" Consolidate the writebackups -- not a big deal either way, since they
+    " usually get deleted, swaps and undo trees.
+	set backupdir^=~/.vim/backup//
+    set directory^=~/.vim/swap//
+    set undodir^=~/.vim/undo//
+end
 
-" Enable the list of buffers
-let g:airline#extensions#tabline#enabled = 1
+" Better diff algorithm
+if has("patch-8.1.0360")
+	set diffopt+=internal,algorithm:patience
+endif
 
-" Show just the filename
-let g:airline#extensions#tabline#fnamemod = ':t'
-
-" See docstrings for folded code
-let g:SimpylFold_docstring_preview=1
-
-" Python3 highlighting
-let g:pymode_python = 'python3'
+"""
+""" Vim filetype-specific config starts here
+"""
 
 " PEP8 indentation
 autocmd BufNewFile,BufRead *.py |
@@ -106,18 +206,38 @@ autocmd BufNewFile,BufRead *.py |
     \ set fileformat=unix |
     \ set textwidth=79
 
-" Mark bad whitespace
-highlight BadWhitespace ctermbg=red guibg=red
-au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
+au BufRead,BufNewFile *.py,*.pyw,*.c,*.h,*.cpp,*.hpp,*.java match BadWhitespace /\s\+$/
 
-highlight Conceal ctermfg=58 ctermbg=NONE
+au Filetype clojure setlocal textwidth=80
+au Filetype c,h,cpp,hpp,java setlocal tabstop=4 shiftwidth=4 expandtab
+au Filetype yaml setlocal tabstop=2 shiftwidth=2 expandtab
+au Filetype xml setlocal autoindent tabstop=4 shiftwidth=4 noexpandtab
+au Filetype sql setlocal tabstop=4 shiftwidth=4 expandtab
+au Filetype markdown,md,txt,text,asciidoc setlocal textwidth=79 nofoldenable
 
-"Stuff
-syntax on
+"""
+""" Vim keybindings config starts here
+"""
+
+" More convenient exit from normal mode
 inoremap jk <ESC>
-set encoding=utf-8
-" allow backspacing over everything in insert mode
-set backspace=indent,eol,start
+
+" Unmap space from default <right>, map it to leader instead (ignore select
+" mode)
+nnoremap <SPACE> <Nop>
+map <SPACE> <Leader>
+sunmap <Space>
+
+" Sane movement through wrapping lines
+noremap j gj
+noremap k gk
+
+" Toggle paste mode
+set pastetoggle=<F9>
+
+" Don't go to Ex mode, or edit command-line history
+map q: <Nop>
+map Q <Nop>
 
 " To open a new empty buffer
 nmap <leader>T :enew<cr>
@@ -135,73 +255,55 @@ nmap <leader>bq :bp <BAR> bd #<CR>
 " Show all open buffers and their status
 nmap <leader>bl :ls<CR>
 
-" proper tabs
-set tabstop=4
-set shiftwidth=4
-set smarttab
-set expandtab
-
-" show line numbers
-set number
-
-" show a visual line under the cursor's current line
-" slows down a LOT
-" set cursorline
-
-" show the matching part of the pair for [] {} and ()
-set showmatch
-
-" Set default split behaviour
-set splitbelow
-set splitright
-
-" Keep some lines within window when moving.
-set scrolloff=5
-
-" Highlight matching words and move during search.
-set hlsearch
-set incsearch
-" Smarter case-sensitive search
-set ignorecase
-set smartcase
-
-" Split keybinding
-" nnoremap <C-J> <C-W><C-J>
-" nnoremap <C-K> <C-W><C-K>
-" nnoremap <C-L> <C-W><C-L>
-" nnoremap <C-R> <C-W><C-H>
-
-" Arrows for resizing
+" Use arrows for resizing
 nnoremap <Up>    :resize -2<CR>
 nnoremap <Down>  :resize +2<CR>
 nnoremap <Left>  :vertical resize +2<CR>
 nnoremap <Right> :vertical resize -2<CR>
 
-" Enable folding
-" set foldmethod=indent
-" Do not fold regions automatically
-set foldlevel=99
+" Use . for each line of visual block
+vnoremap . :normal .<CR>
 
-" 80-line column.
-if exists('+colorcolumn')
-	set colorcolumn=80
-endif
+" Toggle folding with space comma
+nnoremap <leader>, za
 
-" YCM stuff.
-" let g:ycm_autoclose_preview_window_after_completion=1
-" map <leader>g :YcmCompleter GoToDefinitionElseDeclaration<CR>
-
-" CamelCaseMotion mappings
-" call camelcasemotion#CreateMotionMappings('<leader>')
-
-" CtrlP exclude list.
-let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\v[\/](target|\.(git|hg|svn|venv)|__pycache__)$' }
+nnoremap <leader>f gqip
 
 " CtrlP tags search
 nnoremap <leader>. :CtrlPTag<cr>
 
-" Always enable rainbow parenthesis.
+" Auto-reload Clojure source within REPL
+au Filetype clojure nmap <C-c><C-k> :Require<cr>
+
+" NERDTree shortcut
+map <C-k> :NERDTreeToggle<CR>
+map <C-f> :NERDTreeFind<CR>
+
+" Shortcuts for 3-way merge
+map <Leader>1 :diffget LOCAL<CR>
+map <Leader>2 :diffget BASE<CR>
+map <Leader>3 :diffget REMOTE<CR>
+
+" Shorter reformat in paragraph
+nnoremap <leader>f gqip
+
+"""
+""" Vim plugins config starts here
+"""
+
+" Airline
+let g:airline_powerline_fonts = 1
+let g:airline_theme = 'base16_tomorrow'
+" Enable the list of buffers
+let g:airline#extensions#tabline#enabled = 1
+" Show just the filename
+let g:airline#extensions#tabline#fnamemod = ':t'
+
+" CtrlP
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/](target|\.(git|hg|svn|venv)|__pycache__)$' }
+
+" RainbowParen
 au VimEnter * RainbowParenthesesToggle
 au Syntax * RainbowParenthesesLoadRound
 let g:rbpt_colorpairs = [
@@ -225,48 +327,17 @@ let g:rbpt_colorpairs = [
 let g:rbpt_max = 16
 let g:rbpt_loadcmd_toggle = 0
 
-" Auto-reload Clojure source within REPL.
-au Filetype clojure nmap <C-c><C-k> :Require<cr>
-au Filetype clojure setlocal textwidth=80
-
-au Filetype java setlocal tabstop=4 shiftwidth=4 expandtab
-
-" Set tabbing in SQL files.
-au Filetype sql setlocal tabstop=4 shiftwidth=4 expandtab
-au Filetype cpp setlocal tabstop=4 shiftwidth=4 expandtab
-au Filetype c setlocal tabstop=4 shiftwidth=4 expandtab
-au Filetype yaml setlocal tabstop=2 shiftwidth=2 expandtab
-au Filetype xml setlocal autoindent tabstop=4 shiftwidth=4 noexpandtab
-
-au Filetype markdown setlocal textwidth=79
-au Filetype asciidoc setlocal textwidth=79
-
-" Use . for each line of visual block
-vnoremap . :normal .<CR>
-
-" NERDTree shortcut
-map <C-k> :NERDTreeToggle<CR>
-map <C-a> :NERDTreeFind<CR>
+" NERDTree
 let NERDTreeMapActivateNode='<space>'
 let g:NERDTreeNodeDelimiter = "\u00a0"
-
-" Tagbar toggle
-" nmap <F8> :TagbarToggle<CR>
-
 " Open NERDTree automatically if no files were specified
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
-" Use Mac OS clipboard.
-set clipboard=unnamed
-" Show leader-key activation.
-set showcmd
-
-" Syntastic default config
+" Syntastic
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
-
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
@@ -274,54 +345,28 @@ let g:syntastic_check_on_wq = 0
 let g:syntastic_python_python_exec = '/usr/local/bin/python3'
 let g:syntastic_python_checkers=['flake8']
 
-" Let syntastic do all linting.
-let g:pymode_lint = 0
+" SimpylFold
+" See docstrings for folded code
+let g:SimpylFold_docstring_preview=1
 
+" Pymode
 let python_highlight_all = 1
+" Let syntastic do all linting
+let g:pymode_lint = 0
+let g:pymode_python = 'python3'
 
-" Toggle folding with space comma
-nnoremap <leader>, za
+" Split keybinding
+" nnoremap <C-J> <C-W><C-J>
+" nnoremap <C-K> <C-W><C-K>
+" nnoremap <C-L> <C-W><C-L>
+" nnoremap <C-R> <C-W><C-H>
 
-" Faster rendering
-set ttyfast
+" YCM stuff
+" let g:ycm_autoclose_preview_window_after_completion=1
+" map <leader>g :YcmCompleter GoToDefinitionElseDeclaration<CR>
 
-" Toggle paste mode
-set pastetoggle=<F9>
+" CamelCaseMotion mappings
+" call camelcasemotion#CreateMotionMappings('<leader>')
 
-" Blink cursor on error instead of beeping
-set visualbell
-
-nnoremap <leader>f gqip
-
-" shortcuts for 3-way merge
-map <Leader>1 :diffget LOCAL<CR>
-map <Leader>2 :diffget BASE<CR>
-map <Leader>3 :diffget REMOTE<CR>
-if has("patch-8.1.0360")
-	set diffopt+=internal,algorithm:patience
-endif
-
-set mouse=n
-
-" Protect changes between writes. Default values of
-" updatecount (200 keystrokes) and updatetime
-" (4 seconds) are fine
-set swapfile
-set directory^=~/.vim/swap//
-
-" protect against crash-during-write
-set writebackup
-" but do not persist backup after successful write
-set nobackup
-" use rename-and-write-new method whenever safe
-set backupcopy=auto
-" patch required to honor double slash at end
-if has("patch-8.1.0251")
-	" consolidate the writebackups -- not a big
-	" deal either way, since they usually get deleted
-	set backupdir^=~/.vim/backup//
-end
-
-" persist the undo tree for each file
-set undofile
-set undodir^=~/.vim/undo//
+" Tagbar toggle
+" nmap <F8> :TagbarToggle<CR>
