@@ -51,7 +51,12 @@ Plugin 'calebsmith/vim-lambdify'      " -> <bling> defn -> lambda symbol. </blin
 Plugin 'pearofducks/ansible-vim'      " Ansible YAML
 Plugin 'cespare/vim-toml'             " TOML for poetry
 Plugin 'pboettch/vim-cmake-syntax'    " CMake
+Plugin 'godlygeek/tabular'
+Plugin 'plasticboy/vim-markdown'      " MD
 
+" Focus writing
+Plugin 'junegunn/goyo.vim'
+Plugin 'junegunn/limelight.vim'
 
 " Unused
 " Plugin 'majutsushi/tagbar'      " Right side code markers (methods, vars, ...)
@@ -80,6 +85,10 @@ set ttyfast
 syntax on
 " Don't highlight long lines
 set synmaxcol=256
+
+" Italics start/end
+set t_ZH=[3m
+set t_ZR=[23m
 
 " Proper tabs (common languages/format)
 set tabstop=4
@@ -136,7 +145,7 @@ set backspace=indent,eol,start
 set visualbell
 
 " Enable folding
-" set foldmethod=indent
+set foldmethod=indent
 " Do not fold regions automatically
 set foldlevel=99
 
@@ -213,7 +222,7 @@ au Filetype c,h,cpp,hpp,java setlocal tabstop=4 shiftwidth=4 expandtab
 au Filetype yaml setlocal tabstop=2 shiftwidth=2 expandtab
 au Filetype xml setlocal autoindent tabstop=4 shiftwidth=4 noexpandtab
 au Filetype sql setlocal tabstop=4 shiftwidth=4 expandtab
-au Filetype markdown,md,txt,text,asciidoc setlocal textwidth=79 nofoldenable
+au Filetype markdown,md,txt,text,asciidoc setlocal textwidth=79 nofoldenable autoindent
 
 """
 """ Vim keybindings config starts here
@@ -354,6 +363,38 @@ let python_highlight_all = 1
 " Let syntastic do all linting
 let g:pymode_lint = 0
 let g:pymode_python = 'python3'
+
+" Auto-enable Limelight in Goyo
+function! s:goyo_enter()
+  if executable('tmux') && strlen($TMUX)
+    silent !tmux set status off
+    silent !tmux list-panes -F '\#F' | grep -q Z || tmux resize-pane -Z
+  endif
+  set noshowmode
+  set noshowcmd
+  set scrolloff=999
+  Limelight
+  " ...
+endfunction
+
+function! s:goyo_leave()
+  if executable('tmux') && strlen($TMUX)
+    silent !tmux set status on
+    silent !tmux list-panes -F '\#F' | grep -q Z && tmux resize-pane -Z
+  endif
+  set showmode
+  set showcmd
+  set scrolloff=5
+  Limelight!
+  " ...
+endfunction
+
+autocmd! User GoyoEnter nested call <SID>goyo_enter()
+autocmd! User GoyoLeave nested call <SID>goyo_leave()
+
+" Needed for vim-markdown.
+highlight htmlItalic cterm=italic 
+highlight htmlBold cterm=bold
 
 " Split keybinding
 " nnoremap <C-J> <C-W><C-J>
