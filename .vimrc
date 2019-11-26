@@ -159,6 +159,9 @@ set showcmd
 highlight BadWhitespace ctermbg=red guibg=red
 highlight Folded ctermfg=darkgrey ctermbg=NONE
 highlight Conceal ctermfg=58 ctermbg=NONE
+" Needed for vim-markdown.
+highlight htmlItalic cterm=italic 
+highlight htmlBold cterm=bold
 
 " Always display status line
 set laststatus=2
@@ -223,6 +226,7 @@ au Filetype yaml setlocal tabstop=2 shiftwidth=2 expandtab
 au Filetype xml setlocal autoindent tabstop=4 shiftwidth=4 noexpandtab
 au Filetype sql setlocal tabstop=4 shiftwidth=4 expandtab
 au Filetype markdown,md,txt,text,asciidoc setlocal textwidth=79 nofoldenable autoindent
+au Filetype markdown setlocal conceallevel=2
 
 """
 """ Vim keybindings config starts here
@@ -391,10 +395,6 @@ endfunction
 
 autocmd! User GoyoEnter nested call <SID>goyo_enter()
 autocmd! User GoyoLeave nested call <SID>goyo_leave()
-
-" Needed for vim-markdown.
-highlight htmlItalic cterm=italic 
-highlight htmlBold cterm=bold
 
 " Split keybinding
 " nnoremap <C-J> <C-W><C-J>
