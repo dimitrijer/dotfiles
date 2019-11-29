@@ -7,6 +7,7 @@ set nocompatible              " required
 filetype off                  " required
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
+set rtp+=/usr/local/opt/fzf
 call vundle#begin()
 
 " let Vundle manage Vundle, required
@@ -17,14 +18,15 @@ Plugin 'gmarik/Vundle.vim'
 " Bare necessities
 Plugin 'scrooloose/nerdtree.git'
 Plugin 'vim-syntastic/syntastic'
-Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'vim-airline/vim-airline'
+Plugin 'junegunn/fzf.vim'
 
 " Python development
 Plugin 'python-mode/python-mode'
 Plugin 'kh3phr3n/python-syntax'        " Better highlighting
 Plugin 'Vimjas/vim-python-pep8-indent' " Better python indent
 Plugin 'tmhedberg/SimpylFold'          " Better folding
+Plugin 'tpope/vim-commentary'          " Better comments
 
 " Clojure development
 Plugin 'tpope/vim-salve'              " Lein support
@@ -58,12 +60,6 @@ Plugin 'plasticboy/vim-markdown'      " MD
 Plugin 'junegunn/goyo.vim'
 Plugin 'junegunn/limelight.vim'
 
-" Unused
-" Plugin 'majutsushi/tagbar'      " Right side code markers (methods, vars, ...)
-" Plugin 'Valloric/YouCompleteMe' " Code-completion with shitload of required plugins
-" Plugin 'godlygeek/tabular'      " Aligning table-like text
-" Plugin 'jdonaldson/vaxe'        " Haxe plugin
-"
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -155,6 +151,18 @@ set clipboard=unnamed
 " Show leader-key activation
 set showcmd
 
+" Always display status line
+set laststatus=2
+
+" Dark mode
+set background=dark
+" let g:seoul256_background = 234
+" color seoul256
+if filereadable(expand("~/.vimrc_background"))
+  let base16colorspace=256
+  source ~/.vimrc_background
+endif
+
 " Highlight bad whitespace, folded regions and conceal
 highlight BadWhitespace ctermbg=red guibg=red
 highlight Folded ctermfg=darkgrey ctermbg=NONE
@@ -162,16 +170,6 @@ highlight Conceal ctermfg=58 ctermbg=NONE
 " Needed for vim-markdown.
 highlight htmlItalic cterm=italic 
 highlight htmlBold cterm=bold
-
-" Always display status line
-set laststatus=2
-
-" Dark mode
-set background=dark
-if filereadable(expand("~/.vimrc_background"))
-  let base16colorspace=256
-  source ~/.vimrc_background
-endif
 
 " Protect against crash-during-write...
 set writebackup
@@ -202,12 +200,17 @@ if has("patch-8.1.0360")
 	set diffopt+=internal,algorithm:patience
 endif
 
+" Better encryption algorithm
+if !has("nvim")
+    set cryptmethod=blowfish2
+endif
+
 """
 """ Vim filetype-specific config starts here
 """
 
 " PEP8 indentation
-autocmd BufNewFile,BufRead *.py |
+au BufNewFile,BufRead *.py |
     \ set tabstop=4 |
     \ set softtabstop=4 |
     \ set shiftwidth=4 |
@@ -227,6 +230,13 @@ au Filetype xml setlocal autoindent tabstop=4 shiftwidth=4 noexpandtab
 au Filetype sql setlocal tabstop=4 shiftwidth=4 expandtab
 au Filetype markdown,md,txt,text,asciidoc setlocal textwidth=79 nofoldenable autoindent
 au Filetype markdown setlocal conceallevel=2
+" Ensure tabs don't get converted to spaces in Makefiles.
+au FileType make setlocal noexpandtab
+" Make sure all types of requirements.txt files get syntax highlighting.
+au BufNewFile,BufRead requirements*.txt set syntax=python
+
+" Unset paste on InsertLeave.
+au InsertLeave * silent! set nopaste
 
 """
 """ Vim keybindings config starts here
@@ -244,6 +254,16 @@ sunmap <Space>
 " Sane movement through wrapping lines
 noremap j gj
 noremap k gk
+" inoremap <Down> <C-o>gj
+" inoremap <Up> <C-o>gk
+
+" Prevent x from overriding what's in the clipboard.
+" (_ is the black-hole register, vim's equivalent of /dev/null)
+noremap x "_x
+noremap X "_x
+
+" Cycle splits
+nnoremap <S-Tab> <C-w>w
 
 " Toggle paste mode
 set pastetoggle=<F9>
@@ -280,17 +300,12 @@ vnoremap . :normal .<CR>
 " Toggle folding with space comma
 nnoremap <leader>, za
 
-nnoremap <leader>f gqip
-
-" CtrlP tags search
-nnoremap <leader>. :CtrlPTag<cr>
-
 " Auto-reload Clojure source within REPL
 au Filetype clojure nmap <C-c><C-k> :Require<cr>
 
 " NERDTree shortcut
 map <C-k> :NERDTreeToggle<CR>
-map <C-f> :NERDTreeFind<CR>
+map <C-a> :NERDTreeFind<CR>
 
 " Shortcuts for 3-way merge
 map <Leader>1 :diffget LOCAL<CR>
@@ -367,6 +382,7 @@ let python_highlight_all = 1
 " Let syntastic do all linting
 let g:pymode_lint = 0
 let g:pymode_python = 'python3'
+let g:pymode_rope_autoimport = 1
 
 " Auto-enable Limelight in Goyo
 function! s:goyo_enter()
@@ -411,3 +427,23 @@ autocmd! User GoyoLeave nested call <SID>goyo_leave()
 
 " Tagbar toggle
 " nmap <F8> :TagbarToggle<CR>
+
+let $FZF_DEFAULT_OPTS = '--bind ctrl-a:select-all'
+
+" Launch fzf with CTRL+P.
+nnoremap <silent> <C-p> :FZF -m<CR>
+
+function! FZFOpen(command_str)
+  if (expand('%') =~# 'NERD_tree' && winnr('$') > 1)
+    exe "normal! \<c-w>\<c-w>"
+  endif
+  exe 'normal! ' . a:command_str . "\<cr>"
+endfunction
+
+" Map a few common things to do with FZF.
+nnoremap <silent> <C-p> :call FZFOpen(':FZF -m')<CR>
+nnoremap <silent> <Leader>b :call FZFOpen(':Buffers')<CR>
+nnoremap <silent> <C-s>b :call FZFOpen(':BLines')<CR>
+nnoremap <silent> <C-s>l :call FZFOpen(':Lines')<CR>
+
+set completeopt=menuone,noinsert
