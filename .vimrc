@@ -1,68 +1,53 @@
-"""
-""" Vundle config starts here
-"""
+call plug#begin('~/.vim/plugged')
 
-set nocompatible              " required
-
-filetype off                  " required
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-set rtp+=/usr/local/opt/fzf
-call vundle#begin()
-
-" let Vundle manage Vundle, required
-Plugin 'gmarik/Vundle.vim'
-
-" Add all your plugins here (note older versions of Vundle used Bundle " instead of Plugin)
-"
 " Bare necessities
-Plugin 'scrooloose/nerdtree.git'
-Plugin 'vim-syntastic/syntastic'
-Plugin 'vim-airline/vim-airline'
-Plugin 'junegunn/fzf.vim'
+Plug 'scrooloose/nerdtree'
+Plug 'vim-syntastic/syntastic'
+Plug 'vim-airline/vim-airline'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+Plug 'tpope/vim-surround'           " Quick surround: ysiW etc.
+Plug 'tpope/vim-repeat'             " Use . for plugin command repetition, too
+Plug 'tpope/vim-commentary'         " Better comments
+Plug 'kien/rainbow_parentheses.vim' " Pretty paren
 
 " Python development
-Plugin 'python-mode/python-mode'
-Plugin 'kh3phr3n/python-syntax'        " Better highlighting
-Plugin 'Vimjas/vim-python-pep8-indent' " Better python indent
-Plugin 'tmhedberg/SimpylFold'          " Better folding
-Plugin 'tpope/vim-commentary'          " Better comments
+Plug 'python-mode/python-mode'
+Plug 'kh3phr3n/python-syntax'        " Better highlighting
+Plug 'Vimjas/vim-python-pep8-indent' " Better python indent
+Plug 'tmhedberg/SimpylFold'          " Better folding
 
 " Clojure development
-Plugin 'tpope/vim-salve'              " Lein support
-Plugin 'tpope/vim-dispatch'           " Run builds, tests, etc. in tmux, screen...
-Plugin 'tpope/vim-fireplace'          " REPL integration
-Plugin 'tpope/vim-surround'           " Quick surround: ysiW etc.
-Plugin 'tpope/vim-repeat'             " Use . for plugin command repetition, too
-Plugin 'guns/vim-sexp'                " Selection and movement for compound forms and elements
-                                      " (vaf selects entire form, vae selects element, vas
-                                      " string etc.), == for indenting the entire form etc.
-Plugin 'tpope/vim-sexp-mappings-for-regular-people' " dsb, csb, cse{ ...
-Plugin 'kien/rainbow_parentheses.vim' " Pretty paren
-Plugin 'guns/vim-clojure-highlight'   " More highlighting
-Plugin 'guns/vim-slamhound'           " Slamhound namespace mangler integration
-Plugin 'guns/vim-clojure-static'      " EDN files support
+Plug 'tpope/vim-salve',     { 'for': 'clojure' } " Lein support
+Plug 'tpope/vim-dispatch',  { 'for': 'clojure' } " Run builds, tests, etc. in tmux, screen...
+Plug 'tpope/vim-fireplace', { 'for': 'clojure' } " REPL integration
+Plug 'guns/vim-sexp',       { 'for': 'clojure' } " Selection and movement for compound forms and elements
+                                                 " (vaf selects entire form, vae selects element, vas
+                                                 " string etc.), == for indenting the entire form etc.
+
+Plug 'tpope/vim-sexp-mappings-for-regular-people', { 'for': 'clojure' } " dsb, csb, cse                                { ...
+Plug 'guns/vim-clojure-highlight',                { 'for': 'clojure' }  " More highlighting
+Plug 'guns/vim-slamhound',                        { 'for': 'clojure' }  " Slamhound namespace mangler integration
+Plug 'guns/vim-clojure-static',                   { 'for': 'clojure' }  " EDN files support
 
 " Swag
-Plugin 'chriskempson/base16-vim'
-Plugin 'vim-airline/vim-airline-themes'
-Plugin 'ryanoasis/vim-devicons'       " Pretty icons in NERDtree
-Plugin 'calebsmith/vim-lambdify'      " -> <bling> defn -> lambda symbol. </bling>
+Plug 'chriskempson/base16-vim'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'ryanoasis/vim-devicons'       " Pretty icons in NERDtree
+Plug 'calebsmith/vim-lambdify'      " -> <bling> defn -> lambda symbol. </bling>
 
-" Syntax support
-Plugin 'pearofducks/ansible-vim'      " Ansible YAML
-Plugin 'cespare/vim-toml'             " TOML for poetry
-Plugin 'pboettch/vim-cmake-syntax'    " CMake
-Plugin 'godlygeek/tabular'
-Plugin 'plasticboy/vim-markdown'      " MD
+" Additional syntax support
+Plug 'pearofducks/ansible-vim'
+Plug 'cespare/vim-toml'
+Plug 'pboettch/vim-cmake-syntax'
+Plug 'godlygeek/tabular' | Plug 'plasticboy/vim-markdown'
 
 " Focus writing
-Plugin 'junegunn/goyo.vim'
-Plugin 'junegunn/limelight.vim'
+Plug 'junegunn/goyo.vim' | Plug 'junegunn/limelight.vim'
 
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
+call plug#end()
+
+filetype plugin indent on
 
 """
 """ Vim general options start here
