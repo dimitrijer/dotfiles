@@ -156,8 +156,6 @@ set laststatus=2
 
 " Dark mode
 set background=dark
-" let g:seoul256_background = 234
-" color seoul256
 if filereadable(expand("~/.vimrc_background"))
   let base16colorspace=256
   source ~/.vimrc_background
@@ -254,9 +252,6 @@ sunmap <Space>
 " Sane movement through wrapping lines
 noremap j gj
 noremap k gk
-" inoremap <Down> <C-o>gj
-" inoremap <Up> <C-o>gk
-
 " Prevent x from overriding what's in the clipboard.
 " (_ is the black-hole register, vim's equivalent of /dev/null)
 noremap x "_x
