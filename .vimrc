@@ -9,7 +9,10 @@ Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-surround'           " Quick surround: ysiW etc.
 Plug 'tpope/vim-repeat'             " Use . for plugin command repetition, too
 Plug 'tpope/vim-commentary'         " Better comments
+Plug 'tpope/vim-unimpaired'         " Bracket mappings ([n, ]n, [c, ]c, etc.)
 Plug 'kien/rainbow_parentheses.vim' " Pretty paren
+Plug 'neomake/neomake'              " Run make from Vim
+Plug 'mhinz/vim-signify'
 
 " Python development
 Plug 'python-mode/python-mode'
@@ -25,10 +28,14 @@ Plug 'guns/vim-sexp',       { 'for': 'clojure' } " Selection and movement for co
                                                  " (vaf selects entire form, vae selects element, vas
                                                  " string etc.), == for indenting the entire form etc.
 
-Plug 'tpope/vim-sexp-mappings-for-regular-people', { 'for': 'clojure' } " dsb, csb, cse                                { ...
-Plug 'guns/vim-clojure-highlight',                { 'for': 'clojure' }  " More highlighting
-Plug 'guns/vim-slamhound',                        { 'for': 'clojure' }  " Slamhound namespace mangler integration
-Plug 'guns/vim-clojure-static',                   { 'for': 'clojure' }  " EDN files support
+Plug 'tpope/vim-sexp-mappings-for-regular-people', { 'for': 'clojure' } " dsb, csb, cse...
+Plug 'guns/vim-clojure-highlight',                 { 'for': 'clojure' } " More highlighting
+Plug 'guns/vim-slamhound',                         { 'for': 'clojure' } " Slamhound namespace mangler integration
+Plug 'guns/vim-clojure-static',                    { 'for': 'clojure' } " EDN files support
+
+" Haskell development
+Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' } " indentation and syntax highlight
+Plug 'ndmitchell/ghcid', { 'for': 'haskell', 'rtp': 'plugins/nvim' } " IDE support
 
 " Swag
 Plug 'chriskempson/base16-vim'
@@ -41,6 +48,8 @@ Plug 'pearofducks/ansible-vim'
 Plug 'cespare/vim-toml'
 Plug 'pboettch/vim-cmake-syntax'
 Plug 'godlygeek/tabular' | Plug 'plasticboy/vim-markdown'
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
+Plug 'LnL7/vim-nix'
 
 " Focus writing
 Plug 'junegunn/goyo.vim' | Plug 'junegunn/limelight.vim'
@@ -211,7 +220,7 @@ au Filetype c,h,cpp,hpp,java setlocal tabstop=4 shiftwidth=4 expandtab
 au Filetype yaml setlocal tabstop=2 shiftwidth=2 expandtab
 au Filetype xml setlocal autoindent tabstop=4 shiftwidth=4 noexpandtab
 au Filetype sql setlocal tabstop=4 shiftwidth=4 expandtab
-au Filetype markdown,md,txt,text,asciidoc setlocal textwidth=79 nofoldenable autoindent
+au Filetype markdown,md,txt,text,asciidoc setlocal textwidth=79 foldenable autoindent
 au Filetype markdown setlocal conceallevel=2
 " Ensure tabs don't get converted to spaces in Makefiles.
 au FileType make setlocal noexpandtab
@@ -252,21 +261,27 @@ set pastetoggle=<F9>
 map q: <Nop>
 map Q <Nop>
 
+" Skip quickfix buffer when moving through buffers.
+function! BSkipQuickFix(command)
+  let start_buffer = bufnr('%')
+  execute a:command
+  while &buftype ==# 'quickfix' && bufnr('%') != start_buffer
+    execute a:command
+  endwhile
+endfunction
+
 " To open a new empty buffer
-nmap <leader>T :enew<cr>
-
-" Move to the next buffer
-nmap <leader>n :bnext<CR>
-
-" Move to the previous buffer
-nmap <leader>p :bprevious<CR>
+nmap <Leader>t :enew<cr>
 
 " Close the current buffer and move to the previous one
 " This replicates the idea of closing a tab
-nmap <leader>bq :bp <BAR> bd #<CR>
+nmap <Leader>q :call BSkipQuickFix("bp") <BAR> bd #<CR>
 
-" Show all open buffers and their status
-nmap <leader>bl :ls<CR>
+" Move to the next buffer
+nmap <Leader>] :call BSkipQuickFix("bn")<CR>
+
+" Move to the previous buffer
+nmap <Leader>[ :call BSkipQuickFix("bp")<CR>
 
 " Use arrows for resizing
 nnoremap <Up>    :resize -2<CR>
@@ -362,29 +377,37 @@ let python_highlight_all = 1
 " Let syntastic do all linting
 let g:pymode_lint = 0
 let g:pymode_python = 'python3'
-let g:pymode_rope_autoimport = 1
+let g:pymode_rope = 0
+let g:pymode_rope_autoimport = 0
+let g:pymode_rope_regenerate_on_write = 0
+
+" Goyo
+let g:goyo_width = 100
 
 " Auto-enable Limelight in Goyo
 function! s:goyo_enter()
   if executable('tmux') && strlen($TMUX)
-    silent !tmux set status off
+    " silent !tmux set status off
     silent !tmux list-panes -F '\#F' | grep -q Z || tmux resize-pane -Z
   endif
   set noshowmode
   set noshowcmd
   set scrolloff=999
+  set scl=no
   Limelight
   " ...
 endfunction
 
 function! s:goyo_leave()
   if executable('tmux') && strlen($TMUX)
-    silent !tmux set status on
+    " silent !tmux set status on
     silent !tmux list-panes -F '\#F' | grep -q Z && tmux resize-pane -Z
   endif
   set showmode
   set showcmd
   set scrolloff=5
+  set scl=yes
+  SignifyEnable
   Limelight!
   " ...
 endfunction
@@ -422,8 +445,24 @@ endfunction
 
 " Map a few common things to do with FZF.
 nnoremap <silent> <C-p> :call FZFOpen(':FZF -m')<CR>
-nnoremap <silent> <Leader>b :call FZFOpen(':Buffers')<CR>
+nnoremap <silent> <Leader>p :call FZFOpen(':Buffers')<CR>
 nnoremap <silent> <C-s>b :call FZFOpen(':BLines')<CR>
 nnoremap <silent> <C-s>l :call FZFOpen(':Lines')<CR>
 
 set completeopt=menuone,noinsert
+
+" Markdown
+let g:vim_markdown_new_list_item_indent = 2
+let g:vim_markdown_frontmatter = 1
+
+let g:mkdp_open_to_the_world = 1
+let g:mkdp_port = '8894'
+let g:mkdp_preview_options = {
+    \ 'disable_sync_scroll': 1,
+    \ }
+
+
+" VimWiki
+let g:vimwiki_list = [{'path': '~/git/journal/',
+                      \ 'syntax': 'markdown', 'ext': '.md'}]
+let g:vimwiki_global_ext = 0
