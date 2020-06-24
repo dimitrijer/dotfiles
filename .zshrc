@@ -1,10 +1,9 @@
 export ZSH=/Users/dimitrijer/.oh-my-zsh
 
 ZSH_THEME="crunch"
-#ENABLE_CORRECTION="true"
 COMPLETION_WAITING_DOTS="true"
 
-plugins=(osx tmux docker)
+plugins=(osx tmux docker poetry taskwarrior timewarrior)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -19,25 +18,29 @@ alias less='less -m -N -g -i -J --line-numbers --underline-special'
 alias more='less'
 alias irssi="TERM=screen-256color irssi"
 alias t="task"
+alias tw="timew"
 alias igrep="grep -i"
 alias spot="spotify"
 
-export HOMEBREW_GITHUB_API_TOKEN="##########"
+# Add sbin to path (brew installs some stuff there).
+export PATH="/usr/local/sbin:$PATH"
+# Stack installs stuff here.
+export PATH="$HOME/.local/bin:$PATH"
+
 # Use GNU utils instead of BSD
 export PYTHON_LIB_PATH="/Users/dimitrijer/Library/Python/3.7"
-export PATH="$PYTHON_LIB_PATH/bin:/Users/dimitrijer/bin:/usr/local/opt/coreutils/bin:$PATH"
 export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
 
 export POWERLINE_PATH="$PYTHON_LIB_PATH/lib/python/site-packages/powerline"
+export PATH="$PATH:$PYTHON_LIB_PATH/bin"
 source $POWERLINE_PATH/bindings/zsh/powerline.zsh
+export HOMEBREW_GITHUB_API_TOKEN="#######################"
 fpath=(/usr/local/share/zsh-completions $fpath)
 
 export JAVA_HOME=$(/usr/libexec/java_home)
-export EDITOR='vim'
+export EDITOR='nvim'
 
 export DISABLE_AUTO_TITLE='true'
-
-#. /usr/local/etc/profile.d/z.sh
 
 fasd_cache="$HOME/.fasd-init-zsh"
 if [ "$(command -v fasd)" -nt "$fasd_cache" -o ! -s "$fasd_cache" ]; then
@@ -46,8 +49,12 @@ fi
 source "$fasd_cache"
 unset fasd_cache
 
-alias v='f -e vim'
+alias v='f -e nvim'
 alias o='a -e open'
+alias vim='nvim'
+alias vi='nvim'
+alias vimdiff='nvim -d'
+alias ssh='TERM=screen-256color ssh'
 
 # 0 -- vanilla completion (abc => abc)
 # 1 -- smart case completion (abc => Abc)
@@ -58,10 +65,34 @@ zstyle ':completion:*' matcher-list '' \
   'r:[^[:alpha:]]||[[:alpha:]]=** r:|=* m:{a-z\-}={A-Z\_}' \
   'r:|?=** m:{a-z\-}={A-Z\_}'
 
-powerline-daemon -q
-
 source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-. "/usr/local/miniconda3/etc/profile.d/conda.sh"
-
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export FZF_DEFAULT_COMMAND='ag -g ""'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
+# Base16 Shell
+BASE16_SHELL="$HOME/.config/base16-shell/"
+[ -n "$PS1" ] && \
+    [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
+        eval "$("$BASE16_SHELL/profile_helper.sh")"
+
+export PATH="$PATH:/Users/dimitrijer/.poetry/bin"
+
+gtfo() {
+    pgrep "$1" | xargs kill -9
+}
+
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init - zsh)"
+fi
+
+if which pyenv-virtualenv-init > /dev/null; then
+  eval "$(pyenv virtualenv-init -)"
+  export PYENV_VIRTUALENV_DISABLE_PROMPT=1
+fi
+
+# Poetry virtualenv fix
+[ -z "${POETRY_ACTIVE}" ] || source "$(poetry debug:info | grep Path | awk '{print $3}')/bin/activate"
+
+eval "$(direnv hook zsh)"
