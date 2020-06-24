@@ -5,11 +5,15 @@
 -- SELECT * FROM<enter>. %R shows what type of input it expects.
 \set PROMPT2 '... > '
 
-\timing
+\timing on
+\pset linestyle unicode 
+\pset border 2
+\setenv PAGER 'pspg --no-mouse -bX --no-commandbar --no-topbar'
 
 \x auto
 \set VERBOSITY verbose
 \set HISTFILE ~/.psql_history- :DBNAME
+\set HISTSIZE 100000
 \set HISTCONTROL ignoredups
 \set COMP_KEYWORD_CASE upper
 \unset QUIET
