@@ -1,18 +1,21 @@
 call plug#begin('~/.vim/plugged')
 
 " Bare necessities
-Plug 'scrooloose/nerdtree'
-Plug 'vim-syntastic/syntastic'
-Plug 'vim-airline/vim-airline'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
-Plug 'tpope/vim-surround'           " Quick surround: ysiW etc.
-Plug 'tpope/vim-repeat'             " Use . for plugin command repetition, too
-Plug 'tpope/vim-commentary'         " Better comments
-Plug 'tpope/vim-unimpaired'         " Bracket mappings ([n, ]n, [c, ]c, etc.)
-Plug 'kien/rainbow_parentheses.vim' " Pretty paren
-Plug 'neomake/neomake'              " Run make from Vim
-Plug 'mhinz/vim-signify'
+Plug 'junegunn/fzf.vim'              " Quick search
+Plug 'scrooloose/nerdtree'           " File manager
+Plug 'vim-syntastic/syntastic'       " Syntax checking
+Plug 'vim-airline/vim-airline'       " Status bar
+Plug 'tpope/vim-surround'            " Quick surround: ysiW etc.
+Plug 'tpope/vim-repeat'              " Use . for plugin command repetition, too
+Plug 'tpope/vim-commentary'          " Better comments (gc)
+Plug 'tpope/vim-unimpaired'          " Bracket mappings ([n, ]n, [c, ]c, etc.)
+Plug 'kien/rainbow_parentheses.vim'  " Pretty paren
+Plug 'neomake/neomake'               " Run make from Vim
+Plug 'mhinz/vim-signify'             " Git diff column
+Plug 'machakann/vim-highlightedyank' " Highlight yanked regions
+Plug 'SirVer/ultisnips'              " Snippets engine
+Plug 'honza/vim-snippets'            " Snippet db
 
 " Python development
 Plug 'python-mode/python-mode'
@@ -21,27 +24,27 @@ Plug 'Vimjas/vim-python-pep8-indent' " Better python indent
 Plug 'tmhedberg/SimpylFold'          " Better folding
 
 " Clojure development
-Plug 'tpope/vim-salve',     { 'for': 'clojure' } " Lein support
-Plug 'tpope/vim-dispatch',  { 'for': 'clojure' } " Run builds, tests, etc. in tmux, screen...
-Plug 'tpope/vim-fireplace', { 'for': 'clojure' } " REPL integration
-Plug 'guns/vim-sexp',       { 'for': 'clojure' } " Selection and movement for compound forms and elements
-                                                 " (vaf selects entire form, vae selects element, vas
-                                                 " string etc.), == for indenting the entire form etc.
-
-Plug 'tpope/vim-sexp-mappings-for-regular-people', { 'for': 'clojure' } " dsb, csb, cse...
-Plug 'guns/vim-clojure-highlight',                 { 'for': 'clojure' } " More highlighting
-Plug 'guns/vim-slamhound',                         { 'for': 'clojure' } " Slamhound namespace mangler integration
-Plug 'guns/vim-clojure-static',                    { 'for': 'clojure' } " EDN files support
+Plug 'tpope/vim-salve',     { 'for': 'clojure' }                          " Lein support
+Plug 'tpope/vim-dispatch',  { 'for': 'clojure' }                          " Run builds, tests, etc. in tmux, screen...
+Plug 'tpope/vim-fireplace', { 'for': 'clojure' }                          " REPL integration
+Plug 'guns/vim-sexp',       { 'for': 'clojure' }                          " Selection and movement for compound forms and elements
+                                                                          " (vaf selects entire form, vae selects element, vas
+                                                                          " string etc.), == for indenting the entire form etc.
+Plug 'tpope/vim-sexp-mappings-for-regular-people', { 'for': 'clojure' }   " dsb, csb, cse...
+Plug 'guns/vim-clojure-highlight',                 { 'for': 'clojure' }   " More highlighting
+Plug 'guns/vim-slamhound',                         { 'for': 'clojure' }   " Slamhound namespace mangler integration
+Plug 'guns/vim-clojure-static',                    { 'for': 'clojure' }   " EDN files support
 
 " Haskell development
-Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' } " indentation and syntax highlight
+Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' }               " indentation and syntax highlight
 Plug 'ndmitchell/ghcid', { 'for': 'haskell', 'rtp': 'plugins/nvim' } " IDE support
+Plug 'sdiehl/vim-ormolu', { 'for': 'haskell' }
 
 " Swag
 Plug 'chriskempson/base16-vim'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'ryanoasis/vim-devicons'       " Pretty icons in NERDtree
-Plug 'calebsmith/vim-lambdify'      " -> <bling> defn -> lambda symbol. </bling>
+Plug 'ryanoasis/vim-devicons'         " Pretty icons in NERDtree
+Plug 'calebsmith/vim-lambdify'        " -> <bling> defn -> lambda symbol. </bling>
 
 " Additional syntax support
 Plug 'pearofducks/ansible-vim'
@@ -50,6 +53,7 @@ Plug 'pboettch/vim-cmake-syntax'
 Plug 'godlygeek/tabular' | Plug 'plasticboy/vim-markdown'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 Plug 'LnL7/vim-nix'
+Plug 'ekalinin/Dockerfile.vim'
 
 " Focus writing
 Plug 'junegunn/goyo.vim' | Plug 'junegunn/limelight.vim'
@@ -122,7 +126,7 @@ set gdefault
 
 " 80-line column
 if exists('+colorcolumn')
-	set colorcolumn=80
+    set colorcolumn=80
 endif
 
 " Allow backspacing over everything in insert mode
@@ -160,7 +164,7 @@ highlight BadWhitespace ctermbg=red guibg=red
 highlight Folded ctermfg=darkgrey ctermbg=NONE
 highlight Conceal ctermfg=58 ctermbg=NONE
 " Needed for vim-markdown.
-highlight htmlItalic cterm=italic 
+highlight htmlItalic cterm=italic
 highlight htmlBold cterm=bold
 
 " Protect against crash-during-write...
@@ -180,16 +184,16 @@ set undofile
 
 " Patch required to honor double slash at end
 if has("patch-8.1.0251")
-	" Consolidate the writebackups -- not a big deal either way, since they
+    " Consolidate the writebackups -- not a big deal either way, since they
     " usually get deleted, swaps and undo trees.
-	set backupdir^=~/.vim/backup//
+    set backupdir^=~/.vim/backup//
     set directory^=~/.vim/swap//
     set undodir^=~/.vim/undo//
 end
 
 " Better diff algorithm
 if has("patch-8.1.0360")
-	set diffopt+=internal,algorithm:patience
+    set diffopt+=internal,algorithm:patience
 endif
 
 " Better encryption algorithm
@@ -221,6 +225,7 @@ au Filetype yaml setlocal tabstop=2 shiftwidth=2 expandtab
 au Filetype xml setlocal autoindent tabstop=4 shiftwidth=4 noexpandtab
 au Filetype sql setlocal tabstop=4 shiftwidth=4 expandtab
 au Filetype markdown,md,txt,text,asciidoc setlocal textwidth=79 foldenable autoindent
+au Filetype haskell setlocal tabstop=2 shiftwidth=2 expandtab
 au Filetype markdown setlocal conceallevel=2
 " Ensure tabs don't get converted to spaces in Makefiles.
 au FileType make setlocal noexpandtab
@@ -314,6 +319,12 @@ nnoremap <leader>f gqip
 """ Vim plugins config starts here
 """
 
+" Ultisnips
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c->>"
+let g:UltiSnipsJumpBackwardTrigger="<c-<>"
+let g:UltiSnipsEditSplit="vertical"
+
 " Airline
 let g:airline_powerline_fonts = 1
 let g:airline_theme = 'base16_tomorrow'
@@ -321,10 +332,6 @@ let g:airline_theme = 'base16_tomorrow'
 let g:airline#extensions#tabline#enabled = 1
 " Show just the filename
 let g:airline#extensions#tabline#fnamemod = ':t'
-
-" CtrlP
-let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\v[\/](target|\.(git|hg|svn|venv)|__pycache__)$' }
 
 " RainbowParen
 au VimEnter * RainbowParenthesesToggle
@@ -365,7 +372,6 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
-let g:syntastic_python_python_exec = '/usr/local/bin/python3'
 let g:syntastic_python_checkers=['flake8']
 
 " SimpylFold
@@ -431,36 +437,33 @@ autocmd! User GoyoLeave nested call <SID>goyo_leave()
 " Tagbar toggle
 " nmap <F8> :TagbarToggle<CR>
 
+" fzf
 let $FZF_DEFAULT_OPTS = '--bind ctrl-a:select-all'
-
-" Launch fzf with CTRL+P.
-nnoremap <silent> <C-p> :FZF -m<CR>
-
+" Make open with fzf work while in NERD tree.
 function! FZFOpen(command_str)
   if (expand('%') =~# 'NERD_tree' && winnr('$') > 1)
     exe "normal! \<c-w>\<c-w>"
   endif
   exe 'normal! ' . a:command_str . "\<cr>"
 endfunction
-
 " Map a few common things to do with FZF.
 nnoremap <silent> <C-p> :call FZFOpen(':FZF -m')<CR>
 nnoremap <silent> <Leader>p :call FZFOpen(':Buffers')<CR>
 nnoremap <silent> <C-s>b :call FZFOpen(':BLines')<CR>
 nnoremap <silent> <C-s>l :call FZFOpen(':Lines')<CR>
 
-set completeopt=menuone,noinsert
+" set completeopt=menuone,noinsert,preview
 
 " Markdown
 let g:vim_markdown_new_list_item_indent = 2
 let g:vim_markdown_frontmatter = 1
 
+" MarkdownPreview
 let g:mkdp_open_to_the_world = 1
 let g:mkdp_port = '8894'
 let g:mkdp_preview_options = {
     \ 'disable_sync_scroll': 1,
     \ }
-
 
 " VimWiki
 let g:vimwiki_list = [{'path': '~/git/journal/',
