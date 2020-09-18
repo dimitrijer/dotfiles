@@ -9,22 +9,22 @@
 	df = diff
 	dfc = diff --cached
 	br = branch
-	lnc = log --pretty=format:"%h\\ %s\\ [%cn]"
+	psuh = push
+	lnc = log --pretty=format:%h\\ %s\\ [%cn]
 	filelog = log -u
-	dr = "!f() { git diff "$1"^.."$1"; }; f"
-	diffr = "!f() { git diff "$1"^.."$1"; }; f"
+	dr = "!f() { git diff $1^..$1; }; f"
+	diffr = "!f() { git diff $1^..$1; }; f"
 	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %Cblue%an%Creset' --abbrev-commit
 	grep = grep -Ii --recurse-submodules
-	la = "!git config -l | grep alias | cut -c 7-"
+	la = !git config -l | grep alias | cut -c 7-
 	f = fetch
-	oldest-ancestor = !zsh -c 'diff --old-line-format='' --new-line-format='' <(git rev-list --first-parent "${1:-master}") <(git rev-list --first-parent "${2:-HEAD}") | head -1' -
+	oldest-ancestor = !zsh -c 'diff --old-line-format='' --new-line-format='' <(git rev-list --first-parent ${1:-master}) <(git rev-list --first-parent ${2:-HEAD}) | head -1' -
 [color]
 	ui = true
 [merge]
-	tool = vimdiff
-	conflictstyle = diff3
+	tool = kdiff3
 [core]
-	editor = vim
+	editor = nvim
 	mergeoptions = --no-edit
 	autocrlf = input
 [pager]
@@ -64,5 +64,3 @@
 	autoStash = true
 [pull]
 	rebase = true
-[mergetool]
-	prompt = false
