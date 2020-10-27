@@ -28,7 +28,7 @@ export PATH="/usr/local/sbin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 
 # Use GNU utils instead of BSD
-export PYTHON_LIB_PATH="/Users/dimitrijer/Library/Python/3.7"
+export PYTHON_LIB_PATH="/Users/dimitrijer/Library/Python/3.8"
 export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
 
 export POWERLINE_PATH="$PYTHON_LIB_PATH/lib/python/site-packages/powerline"
@@ -37,7 +37,7 @@ source $POWERLINE_PATH/bindings/zsh/powerline.zsh
 export HOMEBREW_GITHUB_API_TOKEN="#######################"
 fpath=(/usr/local/share/zsh-completions $fpath)
 
-export JAVA_HOME=$(/usr/libexec/java_home)
+export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
 export EDITOR='nvim'
 
 export DISABLE_AUTO_TITLE='true'
@@ -95,4 +95,17 @@ fi
 # Poetry virtualenv fix
 [ -z "${POETRY_ACTIVE}" ] || source "$(poetry debug:info | grep Path | awk '{print $3}')/bin/activate"
 
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/dimitrijer/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/dimitrijer/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/dimitrijer/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/dimitrijer/google-cloud-sdk/completion.zsh.inc'; fi
+
+export ANDROID_NDK_HOME="/usr/local/share/android-sdk/ndk/18.1.5063045"
+export ANDROID_SDK_ROOT="/usr/local/share/android-sdk"
+
+export PATH="$PATH:$ANDROID_SDK_ROOT/platform-tools"
+
 eval "$(direnv hook zsh)"
+
+export PATH="$PATH:$HOME/.deverel"
