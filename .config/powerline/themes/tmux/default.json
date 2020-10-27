@@ -10,9 +10,9 @@
 						"pause": " ",
 						"play": " "
 					},
-					"format": "{state_symbol} {artist} - {title}"
+					"format": "{state_symbol} {elapsed} {artist} - {title}"
 				},
-				"before": "  "
+				"before": "  "
 			},
 			{
 				"function": "powerline.segments.common.bat.battery",
@@ -59,7 +59,8 @@
 			{
 				"function": "powerline.segments.common.net.hostname",
 				"args" : {
-					"exclude_domain": true
+					"exclude_domain": true,
+                    "only_if_ssh": true
 				},
 				"priority": 250
 			}
