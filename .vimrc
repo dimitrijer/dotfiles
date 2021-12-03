@@ -14,8 +14,10 @@ Plug 'kien/rainbow_parentheses.vim'  " Pretty paren
 Plug 'neomake/neomake'               " Run make from Vim
 Plug 'mhinz/vim-signify'             " Git diff column
 Plug 'machakann/vim-highlightedyank' " Highlight yanked regions
-Plug 'SirVer/ultisnips'              " Snippets engine
-Plug 'honza/vim-snippets'            " Snippet db
+" Plug 'SirVer/ultisnips'              " Snippets engine
+" Plug 'honza/vim-snippets'            " Snippet db
+Plug 'flwyd/vim-conjoin'             " Smart line join (J)
+
 
 " Python development
 Plug 'python-mode/python-mode'
@@ -38,7 +40,8 @@ Plug 'guns/vim-clojure-static',                    { 'for': 'clojure' }   " EDN 
 " Haskell development
 Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' }               " indentation and syntax highlight
 Plug 'ndmitchell/ghcid', { 'for': 'haskell', 'rtp': 'plugins/nvim' } " IDE support
-Plug 'sdiehl/vim-ormolu', { 'for': 'haskell' }
+" Use release branch (recommend)
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Swag
 Plug 'chriskempson/base16-vim'
@@ -54,9 +57,18 @@ Plug 'godlygeek/tabular' | Plug 'plasticboy/vim-markdown'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 Plug 'LnL7/vim-nix'
 Plug 'ekalinin/Dockerfile.vim'
+Plug 'hashivim/vim-terraform'
 
 " Focus writing
 Plug 'junegunn/goyo.vim' | Plug 'junegunn/limelight.vim'
+
+" Zettelkasten
+Plug 'vimwiki/vimwiki' | Plug 'michal-h21/vim-zettel'
+
+" Google stuff
+Plug 'google/vim-maktaba'
+Plug 'google/vim-codefmt'
+Plug 'google/vim-glaive'
 
 call plug#end()
 
@@ -127,6 +139,7 @@ set gdefault
 " 80-line column
 if exists('+colorcolumn')
     set colorcolumn=80
+    highlight ColorColumn ctermbg=red
 endif
 
 " Allow backspacing over everything in insert mode
@@ -155,7 +168,7 @@ set laststatus=2
 " Dark mode
 set background=dark
 if filereadable(expand("~/.vimrc_background"))
-  let base16colorspace=256
+  " let base16colorspace=256
   source ~/.vimrc_background
 endif
 
@@ -234,6 +247,22 @@ au BufNewFile,BufRead requirements*.txt set syntax=python
 
 " Unset paste on InsertLeave.
 au InsertLeave * silent! set nopaste
+
+augroup autoformat_settings
+  autocmd FileType bzl AutoFormatBuffer buildifier
+  autocmd FileType c,cpp,proto,javascript,arduino AutoFormatBuffer clang-format
+  autocmd FileType dart AutoFormatBuffer dartfmt
+  autocmd FileType go AutoFormatBuffer gofmt
+  autocmd FileType gn AutoFormatBuffer gn
+  autocmd FileType html,css,sass,scss,less,json AutoFormatBuffer js-beautify
+  autocmd FileType java AutoFormatBuffer google-java-format
+  autocmd FileType python AutoFormatBuffer black
+  " Alternative: autocmd FileType python AutoFormatBuffer autopep8
+  autocmd FileType rust AutoFormatBuffer rustfmt
+  autocmd FileType vue AutoFormatBuffer prettier
+  autocmd FileType nix AutoFormatBuffer nixpkgs-fmt
+  autocmd FileType haskell AutoFormatBuffer ormolu
+augroup END
 
 """
 """ Vim keybindings config starts here
@@ -319,12 +348,6 @@ nnoremap <leader>f gqip
 """ Vim plugins config starts here
 """
 
-" Ultisnips
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<c->>"
-let g:UltiSnipsJumpBackwardTrigger="<c-<>"
-let g:UltiSnipsEditSplit="vertical"
-
 " Airline
 let g:airline_powerline_fonts = 1
 let g:airline_theme = 'base16_tomorrow'
@@ -360,9 +383,10 @@ let g:rbpt_loadcmd_toggle = 0
 " NERDTree
 let NERDTreeMapActivateNode='<space>'
 let g:NERDTreeNodeDelimiter = "\u00a0"
-" Open NERDTree automatically if no files were specified
+" Open NERDTree automatically if no files were specified, and change focus to
+" new buffer.
 autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | wincmd w | endif
 
 " Syntastic
 set statusline+=%#warningmsg#
@@ -393,7 +417,7 @@ let g:goyo_width = 100
 " Auto-enable Limelight in Goyo
 function! s:goyo_enter()
   if executable('tmux') && strlen($TMUX)
-    " silent !tmux set status off
+    silent !tmux set status off
     silent !tmux list-panes -F '\#F' | grep -q Z || tmux resize-pane -Z
   endif
   set noshowmode
@@ -406,7 +430,7 @@ endfunction
 
 function! s:goyo_leave()
   if executable('tmux') && strlen($TMUX)
-    " silent !tmux set status on
+    silent !tmux set status on
     silent !tmux list-panes -F '\#F' | grep -q Z && tmux resize-pane -Z
   endif
   set showmode
@@ -420,22 +444,6 @@ endfunction
 
 autocmd! User GoyoEnter nested call <SID>goyo_enter()
 autocmd! User GoyoLeave nested call <SID>goyo_leave()
-
-" Split keybinding
-" nnoremap <C-J> <C-W><C-J>
-" nnoremap <C-K> <C-W><C-K>
-" nnoremap <C-L> <C-W><C-L>
-" nnoremap <C-R> <C-W><C-H>
-
-" YCM stuff
-" let g:ycm_autoclose_preview_window_after_completion=1
-" map <leader>g :YcmCompleter GoToDefinitionElseDeclaration<CR>
-
-" CamelCaseMotion mappings
-" call camelcasemotion#CreateMotionMappings('<leader>')
-
-" Tagbar toggle
-" nmap <F8> :TagbarToggle<CR>
 
 " fzf
 let $FZF_DEFAULT_OPTS = '--bind ctrl-a:select-all'
@@ -466,6 +474,56 @@ let g:mkdp_preview_options = {
     \ }
 
 " VimWiki
-let g:vimwiki_list = [{'path': '~/git/journal/',
-                      \ 'syntax': 'markdown', 'ext': '.md'}]
-let g:vimwiki_global_ext = 0
+let g:vimwiki_list = [{'path': '~/git/zettelkasten/',
+                      \ 'syntax': 'markdown',
+                      \ 'ext': '.md'}]
+
+nnoremap <leader>zn :Zettelnew<space>
+
+" CoC
+"
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <c-space> to trigger completion.
+inoremap <silent><expr> <c-space> coc#refresh()
+
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
+  else
+    execute '!' . &keywordprg . " " . expand('<cword>')
+  endif
+endfunction
+
+
+" Remap keys for applying codeAction to the current buffer.
+nmap <leader>ac  <Plug>(coc-codeaction)
+" Apply AutoFix to problem on the current line.
+nmap <leader>qf  <Plug>(coc-fix-current)
+
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use `[g` and `]g` to navigate diagnostics
+" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+xmap if <Plug>(coc-funcobj-i)
+omap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap af <Plug>(coc-funcobj-a)
