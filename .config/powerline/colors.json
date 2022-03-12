@@ -1,6 +1,6 @@
 {
 	"colors": {
-		"black": 16,
+		"black": 232,
 		"white": 231,
 
 		"green": 2,
@@ -15,8 +15,7 @@
 		"brightcyan": 159,
 
 		"darkestblue": 24,
-        "darkblueold": 31,
-		"darkblue": 69,
+		"darkblue": 31,
 
 		"red": 1,
 		"darkestred": 52,
@@ -28,6 +27,7 @@
 		"darkestpurple": 55,
 		"mediumpurple": 98,
 		"brightpurple": 189,
+        "magenta": 183,
 
 		"darkorange": 94,
 		"mediumorange": 166,
@@ -52,7 +52,7 @@
 		"gray11": 234,
 		"gray90": 254,
 
-		"gray70": [249, "b3b3b3"],
+		"gray70": 0,
 
 		"lightyellowgreen": 106,
 		"gold3": 178,
@@ -61,6 +61,7 @@
 		"steelblue": 67,
 		"darkorange3": 166,
 		"skyblue1": 117,
+		"skyblue3": 74,
 		"khaki1": 228,
 
 		"solarized:base03": [8, "002b36"],

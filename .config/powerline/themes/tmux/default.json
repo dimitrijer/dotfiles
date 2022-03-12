@@ -2,19 +2,6 @@
 	"segments": {
 		"right": [
 			{
-				"function": "powerline.segments.common.players.spotify",
-				"name": "player",
-				"priority": 300,
-				"args": {
-					"state_symbols": {
-						"pause": " ",
-						"play": " "
-					},
-					"format": "{state_symbol} {elapsed} {artist} - {title}"
-				},
-				"before": "  "
-			},
-			{
 				"function": "powerline.segments.common.bat.battery",
 				"priority": 200,
 				"args": {
@@ -58,9 +45,10 @@
 			},
 			{
 				"function": "powerline.segments.common.net.hostname",
+				"before": "@ ",
 				"args" : {
 					"exclude_domain": true,
-                    "only_if_ssh": true
+					"only_if_ssh": true
 				},
 				"priority": 250
 			}

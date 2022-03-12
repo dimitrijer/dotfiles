@@ -5,13 +5,17 @@
 			{
 			"left": [
 				{
-					"function": "powerline.segments.common.net.hostname",
-					"priority": 30
-				},
-				{
 					"function": "powerline.segments.common.env.user",
 					"priority": 20,
 					"before" : " "
+				},
+				{
+					"function": "powerline.segments.common.net.hostname",
+					"priority": 30,
+					"before" : "@ ",
+					"args": {
+						"exclude_domain": true
+					}
 				},
 				{
 					"function": "powerline.segments.common.env.virtualenv",
@@ -20,16 +24,21 @@
 				{
 					"before": "  ",
 					"function": "cwd",
-					"priority": 10
+					"priority": 10,
+					"draw_hard_divider": true
 				},
 				{
-					"function": "continuation",
+					"function": "powerline.segments.shell.continuation",
+					"draw_soft_divider": false,
 					"draw_hard_divider": false,
-					"draw_soft_divider": false
-				}],
+					"args": {
+						"right_align": true
+					}
+				}
+			],
 			"right": [
 				{
-				    "function": "powerline_gitstatus.gitstatus",
+				    "function": "powerline_hgstatus.hgstatus",
 				    "priority": 40
 				},
 				{
