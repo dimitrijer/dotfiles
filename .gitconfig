@@ -1,6 +1,6 @@
 [user]
 	name = Dimitrije Radojević
-	email = dimitrijer@nordeus.com
+	email = me@dimitrije.website
 [alias]
 	g = gui
 	cp = cherry-pick
@@ -38,13 +38,6 @@
 	required = true
 	clean = git-lfs clean -- %f
 	process = git-lfs filter-process
-[sendemail]
-	smtpencryption = tls
-	smtpserver = smtp.gmail.com
-	smtpserverport = 587
-	smtpuser = dimitrijer@nordeus.com
-	from = dimitrijer@nordeus.com
-	smtpsslcertpath = /etc/ssl/cert.pem
 [color "diff-highlight"]
 	oldNormal = red bold
 	oldHighlight = red bold 52
