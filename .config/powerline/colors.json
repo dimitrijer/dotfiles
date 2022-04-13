@@ -38,7 +38,7 @@
 		"brightyellow": 220,
 
 		"gray0": 233,
-		"gray1": 235,
+		"gray1": [0, "1d1f21"],
 		"gray2": 236,
 		"gray3": 239,
 		"gray4": 240,
